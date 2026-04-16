@@ -1,0 +1,81 @@
+@model VFL.Renderer.ViewModels.MyBillLoginStatus.MyBillLoginStatusViewModel
+
+@if (Model.IsAuthenticated)
+{
+    <!-- Authenticated User View -->
+    <div class="d-flex align-items-center">
+        @if (!string.IsNullOrEmpty(Model.ProfileImageUrl))
+        {
+            <img src="@Model.ProfileImageUrl" alt="Profile" class="rounded-circle me-2" style="width: 40px; height: 40px; object-fit: cover;">
+        }
+        else
+        {
+            <div class="rounded-circle bg-primary text-white d-flex align-items-center justify-content-center me-2" 
+                 style="width: 40px; height: 40px; font-weight: bold;">
+                @(Model.CompanyName?.Substring(0, 1).ToUpper() ?? "C")
+            </div>
+        }
+        
+        <div class="dropdown">
+            <a href="#" class="d-flex align-items-center text-decoration-none dropdown-toggle" 
+               id="myBillUserDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                <span class="fw-semibold">@Model.CompanyName</span>
+            </a>
+            <ul class="dropdown-menu dropdown-menu-end shadow" aria-labelledby="myBillUserDropdown">
+                @if (Model.MyBillDashboard != null)
+                {
+                    <li>
+                        <a class="dropdown-item" href="@Model.MyBillDashboard.ViewUrl">
+                            <i class="ri-dashboard-line me-2"></i> Dashboard
+                        </a>
+                    </li>
+                }
+                @if (Model.TransactionHistory != null)
+                {
+                    <li>
+                        <a class="dropdown-item" href="@Model.TransactionHistory.ViewUrl">
+                            <i class="ri-file-list-3-line me-2"></i> Transaction History
+                        </a>
+                    </li>
+                }
+                @if (Model.ProfilePage != null)
+                {
+                    <li>
+                        <a class="dropdown-item" href="@Model.ProfilePage.ViewUrl">
+                            <i class="ri-user-settings-line me-2"></i> Profile Settings
+                        </a>
+                    </li>
+                }
+                <li><hr class="dropdown-divider"></li>
+                <li>
+                    <a class="dropdown-item text-danger js-mybill-logout" href="#" data-logout-redirect="@Model.LogoutRedirectUrl">
+                        <i class="ri-logout-box-r-line me-2"></i> Sign Out
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+    
+    <!-- Include Token Auto-Refresh Script (for API calls made during session) -->
+    <script>
+        window.mybillConfig = window.mybillConfig || {};
+        window.mybillConfig.jwtExpiryMinutes = @(ViewBag.MyBillJwtExpiryMinutes ?? 14);
+        window.mybillConfig.loginPath = '@Html.Raw(ViewBag.MyBillLoginPath ?? "/my-bill-login")';
+    </script>
+    <script src="~/scripts/MyBillWidgets/mybill-auth-refresh.js" asp-append-version="true"></script>
+    
+    <!-- Include Logout Script -->
+    <script src="~/scripts/MyBillWidgets/mybill-logout.js" asp-append-version="true"></script>
+}
+else
+{
+    <!-- Guest User View -->
+    <div class="d-flex align-items-center gap-2">
+        @if (Model.LoginPage != null)
+        {
+            <a href="@Model.LoginPage.ViewUrl" class="btn btn-outline-primary btn-sm">
+                <i class="ri-login-box-line me-1"></i> Login
+            </a>
+        }
+    </div>
+}

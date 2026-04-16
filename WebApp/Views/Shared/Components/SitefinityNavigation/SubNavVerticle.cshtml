@@ -1,0 +1,191 @@
+﻿@using Progress.Sitefinity.AspNetCore.Mvc.Rendering
+@using Progress.Sitefinity.AspNetCore.Widgets.Models.Navigation;
+
+@model Progress.Sitefinity.AspNetCore.Widgets.Models.Navigation.NavigationViewModel
+
+<div class="main-sidebar @Model.WrapperCssClass" id="sidebar-scroll">
+    <nav @Html.BuildAttributes(Model.Attributes) class="main-menu-container nav nav-pills flex-column sub-open">
+        <div class="slide-left" id="slide-left">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="#7b8191" width="24" height="24" viewBox="0 0 24 24">
+                <path d="M13.293 6.293 7.586 12l5.707 5.707 1.414-1.414L10.414 12l4.293-4.293z"></path>
+            </svg>
+        </div>
+        <ul class="main-menu flex-column">
+            @foreach (var node in Model.Nodes)
+            {
+                RenderSubLevelsRecursive(node);
+            }
+        </ul>
+        <div class="slide-right" id="slide-right">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="#7b8191" width="24" height="24" viewBox="0 0 24 24">
+                <path d="M10.707 17.707 16.414 12l-5.707-5.707-1.414 1.414L13.586 12l-4.293 4.293z"></path>
+            </svg>
+        </div>
+    </nav>
+</div>
+
+@*Here is specified the rendering for the sub levels*@
+@{
+    void RenderSubLevelsRecursive(PageViewModel node)
+    {
+
+        @if (node.ChildNodes.Count > 0)
+        {
+            <li class="slide__category">
+                <span class="category-name">@node.Title</span>
+            </li>
+            @if (node.ChildNodes.Count > 0)
+            {
+                @foreach (var childNode in node.ChildNodes)
+                {
+                    RenderSecondSubLevelsRecursive(childNode);
+                }
+            }
+        }
+        else
+        {
+            @if (Context.User != null && Context.User.Identity.IsAuthenticated)
+            {
+                @if (node.Title != "Login")
+                {
+                    <li class="slide">
+                        <a class="side-menu__item @GetClass(node)" href="@node.Url" target="@node.LinkTarget">
+                        <i class="ri-dashboard-line side-menu__icon"></i>
+                        <span class="side-menu__label">@node.Title</span>
+                    </a>
+                </li>
+                }
+            }
+            else
+            {
+                @if (node.Title == "Login")
+                {
+                    <li class="slide">
+                        <a class="side-menu__item @GetClass(node)" href="@node.Url" target="@node.LinkTarget">
+                            <i class="ri-logout-box-r-line side-menu__icon"></i>
+                            <span class="side-menu__label">@node.Title</span>
+                        </a>
+                    </li>
+                }
+            }
+        }
+    }
+}
+
+
+@*Here is specified the rendering for the sub levels*@
+@{
+    void RenderSecondSubLevelsRecursive(PageViewModel node)
+    {
+        @if (Context.User != null && Context.User.Identity.IsAuthenticated)
+        {
+            @if (node.ChildNodes.Count > 0)
+            {
+                <li class="slide has-sub">
+                    <a class="side-menu__item @GetClass(node)" href="@node.Url" target="@node.LinkTarget">
+                        <i class="ri-dashboard-line side-menu__icon"></i>
+                        <span class="side-menu__label">@node.Title</span>
+                    </a>
+                    <ul class="slide-menu child1">
+                        @foreach (var childNode in node.ChildNodes)
+                        {
+                            RenderThirdSubLevelsRecursive(childNode);
+                        }
+                    </ul>
+                </li>
+
+            }
+            else
+            {
+                <li class="slide">
+                    <a class="side-menu__item @GetClass(node)" href="@node.Url" target="@node.LinkTarget">
+                        <i class="ri-dashboard-line side-menu__icon"></i>
+                        <span class="side-menu__label">@node.Title</span>
+                    </a>
+                </li>
+            }
+        }
+        else
+        {
+            @if (node.ChildNodes.Count > 0)
+            {
+                <li class="slide has-sub">
+                    <a class="side-menu__item @GetClass(node)" href="@node.Url" target="@node.LinkTarget">
+                        <i class="ri-dashboard-line side-menu__icon"></i>
+                        <span class="side-menu__label">@node.Title</span>
+                    </a>
+                    <ul class="slide-menu child1">
+                        @foreach (var childNode in node.ChildNodes)
+                        {
+                            RenderThirdSubLevelsRecursive(childNode);
+                        }
+                    </ul>
+                </li>
+
+            }
+            else
+            {
+                @if (node.Title == "WebTopUp" || node.Title == "Purchase Plan")
+                {
+                    <li class="slide">
+                        <a class="side-menu__item @GetClass(node)" href="@node.Url" target="@node.LinkTarget">
+                            <i class="ri-dashboard-line side-menu__icon"></i>
+                            <span class="side-menu__label">@node.Title</span>
+                        </a>
+                    </li>
+                }
+
+            }
+        }
+
+    }
+}
+
+@*Here is specified the rendering for the sub levels*@
+@{
+    void RenderThirdSubLevelsRecursive(PageViewModel node)
+    {
+
+        @if (node.ChildNodes.Count > 0)
+        {
+            <li class="slide has-sub">
+                <a class="side-menu__item @GetClass(node)" href="javascript:void(0);" target="@node.LinkTarget">
+                    <i class="ri-home-8-line side-menu__icon"></i>
+                    <span class="side-menu__label">@node.Title</span>
+                    <i class="ri ri-arrow-right-s-line side-menu__angle"></i>
+                </a>
+                <u>
+                    @foreach (var childNode in node.ChildNodes)
+                    {
+                        RenderSubLevelsRecursive(childNode);
+                    }
+                </u>
+
+            </li>
+
+        }
+        else
+        {
+            <li class="slide">
+                <a href="@node.Url" class="side-menu__item">@node.Title</a>
+            </li>
+
+        }
+
+    }
+}
+
+
+
+@*Resolves the class that will be added for each node depending whether it is selected*@
+@{
+    Microsoft.AspNetCore.Html.IHtmlContent GetClass(PageViewModel node)
+    {
+        if (node.IsCurrentlyOpened)
+        {
+            return Html.HtmlSanitize("active");
+        }
+
+        return null;
+    }
+}

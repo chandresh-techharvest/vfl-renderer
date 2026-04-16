@@ -1,0 +1,503 @@
+﻿@model VFL.Renderer.ViewModels.Subscription.SubscriptionViewModel;
+
+<div class="row" id="selected-plan-view" >
+    <div class="col-xl-12">
+        <div class="card custom-card">
+            <div class="card-body">
+                <ul class="nav nav-tabs tab-style-1 d-sm-flex d-block" role="tablist">
+                    <li class="nav-item">
+                        <a class="nav-link active" data-bs-toggle="tab" data-bs-target="#currentsubscription"
+                           aria-current="page" href="#currentsubscription">Current Subscription</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" data-bs-toggle="tab" data-bs-target="#4gplans"
+                           href="#4gplans">4G Plans</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" data-bs-toggle="tab" data-bs-target="#5gplans"
+                           href="#5gplans">5G Plans</a>
+                    </li>
+
+                </ul>
+                <div class="tab-content">
+                    <div class="tab-pane active" id="currentsubscription" role="tabpanel">
+
+                        <div class="row justify-content-start">
+
+                            @if (Model.ActivePlans != null && Model.ActivePlans.Any())
+                            
+                            {
+                                foreach (var plan in Model.ActivePlans)
+                                {
+                                    string planCode = "";
+                                    string paymentMethod = "";
+                                    if (plan.PlanCodes.Any())
+                                        planCode = plan.PlanCodes[0].Pcode; paymentMethod = plan.PlanCodes[0].PaymentMethod;
+
+                                    <div class="col-xxl-3 col-xl-6 col-lg-6 col-md-6 col-sm-12">
+                                        <div class="card custom-card overflow-hidden position-relative">
+                                            <!-- Badge -->
+                                            <span class="badge rounded-pill bg-green-transparent position-absolute top-0 end-0 m-3">
+                                                <i class="bx bx-circle bg-green fs-8 rounded-circle"></i>
+                                                @{
+                                                    string payment = paymentMethod == "CREDIT" ? "Credit Card" : paymentMethod == "MPAISA" ? "MPaisa" : "Purchased Credit";
+                                                }
+                                                @payment
+                                            </span>
+
+                                            <div class="card-body p-0">
+                                                <div class="p-4">
+                                                    <h5 class="plan-price">@plan.AmountWithCurrency</h5>
+                                                    <div class="d-flex align-items-center justify-content-between mt-3">
+                                                        <h6 class="plan-name mb-0">@plan.Name</h6>
+                                                        <!-- Info icon -->
+                                                        <a href="javascript:void(0)" class="plan-info" data-name="@plan.Name" data-details="@Html.Raw(plan.Details)" aria-label="View plan details" title="View plan details" data-bs-toggle="modal" data-bs-target="#Modalplandetails">
+                                                            <i class="bi bi-info-circle"></i> Plan Details
+                                                        </a>
+                                                    </div>
+                                                    <p class="plan-desc mt-2">  @Html.Raw(plan.Summary)</p>
+
+                                                    <div class="d-flex justify-content-between mt-4 gap-1">
+                                                        @if (plan.PlanType != "GIFT")
+                                                        {
+                                                            <button class="btn btn-secondary btn-wave action-btn" data-process="2" data-planid="@plan.PlanId" data-planCode="@planCode">Unsubscribe</button>
+                                                            if (paymentMethod.Equals("REAL_MONEY"))
+                                                            {
+                                                                <button class="btn btn-primary btn-wave action-btn" data-process="3" data-planid="@plan.PlanId" data-planCode="@planCode">Resubscribe</button>
+                                                            }
+                                                        }
+
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                }
+
+
+                            }
+                            else
+                            {
+
+                                <p class="text-danger"><h3>No Active Subscriptions</h3></p>
+                            
+                            }
+
+                            
+                        </div>
+
+                    </div>
+
+                    <div class="tab-pane" id="4gplans" role="tabpanel">
+                        <div class="row">
+                            <div class="col-xl-12">
+                                <div class="card custom-card bg-light">
+                                    <div class="card-body">
+                                        <form class="row row-cols-lg-auto g-3 align-items-center">
+                                            <div class="col-12">
+                                                <div class="input-group">
+                                                    <label class="input-group-text" for="inputGroupSelect01">Plan Type</label>
+                                                    <select class="form-select" id="planTypeFilter">
+
+                                                        <option value="">All Categories</option>
+
+                                                        @if (Model?.PlanTypes != null)
+                                                        {
+                                                            foreach (var type in Model.PlanTypes)
+                                                            {
+                                                                <option value="@type.Identifier">
+                                                                    @type.Name
+                                                                </option>
+                                                            }
+                                                        }
+
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="col-12">
+                                                <div class="input-group">
+                                                    <label class="input-group-text" for="inputGroupSelect01">Sort By</label>
+                                                    <select class="form-select" id="sortFilter">
+                                                        <option value="price_asc">Price: Low to High</option>
+                                                        <option value="price_desc">Price: High to Low</option>
+                                                        <option value="data_asc">Data: Low to High</option>
+                                                        <option value="data_desc">Data: High to Low</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="d-flex flex-wrap justify-content-start gap-3 py-2">
+                            <div class="row g-3 plan-selector" id="plansContainer">
+
+                              
+
+
+                            </div>
+                        </div>
+
+                        <!-- Pagination -->
+                        <nav aria-label="Page navigation" class=" pagination-style-3 mt-3">
+                            <ul class="pagination mb-0 flex-wrap" id="pagination4g"></ul>
+                        </nav>
+
+                        <div class="row">
+                            <div class="col-md-12 mt-3">
+                                <div class="d-flex justify-content-end">
+
+                                    <a href="javascript:void(0)" class="btn btn-primary btnSubscribe " style="width: 100px;" data-process="1">Subscribe</a>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div class="tab-pane" id="5gplans" role="tabpanel">
+                        <div class="row">
+                            <div class="col-xl-12">
+                                <div class="card custom-card bg-light">
+                                    <div class="card-body">
+                                        <form class="row row-cols-lg-auto g-3 align-items-center">
+                                            <div class="col-12">
+                                                <div class="input-group">
+                                                    <label class="input-group-text" for="inputGroupSelect01">Plan Type</label>
+                                                    <select class="form-select" id="planTypeFilter5g">
+                                                        <option value="">All Categories</option>
+
+                                                        @if (Model?.PlanTypes != null)
+                                                        {
+                                                            foreach (var type in Model.PlanTypes)
+                                                            {
+                                                                <option value="@type.Identifier">
+                                                                    @type.Name
+                                                                </option>
+                                                            }
+                                                        }
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="col-12">
+                                                <div class="input-group">
+                                                    <label class="input-group-text" for="inputGroupSelect01">Sort By</label>
+                                                    <select class="form-select" id="sortFilter5g">
+                                                        <option value="price_asc">Price: Low to High</option>
+                                                        <option value="price_desc">Price: High to Low</option>
+                                                        <option value="data_asc">Data: Low to High</option>
+                                                        <option value="data_desc">Data: High to Low</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="d-flex flex-wrap justify-content-start gap-3 py-2">
+                            <div class="row g-3 plan-selector" id="plansContainer5g">
+                                
+                            
+
+                            </div>
+                        </div>
+
+                        <!-- Pagination -->
+                        <nav aria-label="Page navigation" class=" pagination-style-3 mt-3">
+                            <ul class="pagination mb-0 flex-wrap" id="pagination5g"></ul>
+                        </nav>
+
+                        <div class="row">
+                            <div class="col-md-12 mt-3">
+                                <div class="d-flex justify-content-end">
+                                    <a href="javascript:void(0)" class="btn btn-primary btnSubscribe"  style="width: 100px;" data-process="1">Subscribe</a>
+                                </div>
+                            </div>
+                        </div>
+
+
+                    </div>
+
+                    <!-- plan Modal -->
+                    <div class="modal fade" id="Modalplandetails" tabindex="-1" aria-labelledby="exampleModalFullscreenLabel" aria-hidden="true" style="display: none;">
+                        <div class="modal-dialog modal-fullscreen">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h6 class="modal-title" id="exampleModalFullscreenLabel">Plan Details</h6>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body d-flex justify-content-center">
+                                    <div class="col-lg-6 col-md-10 col-sm-12">
+                                        <ul class="fs-14 ps-3">
+                                           
+                                        </ul>
+                                    </div>
+                                </div>
+
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary"
+                                        data-bs-dismiss="modal">
+                                    Close
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- confirmation modal -->
+                <div class="modal fade" id="ModalConfirmation-prepaygifting" tabindex="-1"
+                     aria-labelledby="exampleModalScrollable2" data-bs-keyboard="false"
+                     aria-hidden="true">
+                    <!-- Scrollable modal -->
+                    <div class="modal-dialog modal-dialog-centered">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h6 class="modal-title" id="staticBackdropLabel2">
+                                    Confirmation
+                                </h6>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                        aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <p>Dear <span id="confirmUser"></span>,</p>
+                                <p id="planintro">You are about to gift the following plan:</p>
+
+                                <ul class="list-unstyled mb-3">
+                                    <li><strong>Plan Name:</strong> <span id="confirmPlan"></span></li>
+                                    <li><strong>Price:</strong> <span id="confirmPrice"></span></li>
+                                   
+                                    <li><strong>Mobile Number:</strong> <span id="confirmNumber"></span></li>
+                                    <li><strong>Summary:</strong> <span id="confirmSummary"></span></li>
+                                </ul>
+
+                                <p id="confirmMessage" >Do you wish to continue with the subscription?</p>
+                            </div>
+
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                 
+                                <button type="button" class="btn btn-primary" id="confirmBtn">Confirm</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+                <!-- OTP Option -->
+                <div class="modal fade" id="exampleModalScrollable2" tabindex="-1" aria-labelledby="exampleModalScrollable2" data-bs-keyboard="false" aria-hidden="true">
+
+                    <div class="modal-dialog modal-dialog-centered">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h6 class="modal-title" id="staticBackdropLabel2">Select OTP Verification Method</h6>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <form>
+                                    <div class="d-flex flex-column align-items-center gap-2">
+                                        <div class="form-check form-check-md">
+                                            <input class="form-check-input" type="radio" name="otpOption" id="otpMobile" value="1" style="border: 1px solid rgb(117, 117, 117);">
+                                            <label class="form-check-label" for="otpMobile"> Send OTP via SMS</label>
+                                        </div>
+                                        <div class="form-check form-check-md">
+                                            <input class="form-check-input" type="radio" name="otpOption" id="otpEmail" value="2" style="border: 1px solid rgb(117, 117, 117);">
+                                            <label class="form-check-label" for="otpEmail">Send OTP via Email</label>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary"
+                                        data-bs-dismiss="modal">
+                                    Close
+                                </button>
+                                @* <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#otpmodal"  >verify</button> *@
+                                <button type="button"
+                                        id="btnSendOtp"
+                                        class="btn btn-primary">
+                                    Verify
+                                </button>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- OTP -->
+                <div class="modal fade" id="otpmodal" tabindex="-1" aria-labelledby="otpmodal" data-bs-keyboard="false" aria-hidden="true">
+                    <!-- Scrollable modal -->
+                    <div class="modal-dialog modal-dialog-centered">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h6 class="modal-title" id="staticBackdropLabel2">OTP Verification</h6>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <p class="mb-4" id="otpMessage">Please enter the 4 digit code sent to </p>
+                                <div class="alert alert-success d-none" id="otpSuccessMessage" role="alert">
+                                    <i class="bi bi-check-circle-fill me-2"></i>
+                                    The OTP code has been successfully sent. Please check your messages.
+                                </div>
+                                <div class="alert alert-info d-none" id="otpResendInfoMessage" role="alert">
+                                    <i class="bi bi-info-circle-fill me-2"></i>
+                                    The Resend button is enabled. Please click to resend SMS if you have not received it.
+                                </div>
+                                <p class="text-muted mb-3">
+                                    <span id="otpTimer" class="me-auto text-muted">30</span>
+                                </p>
+                                <form>
+                                    <div class="mb-3">
+                                        <input type="text" class="form-control" id="otpCode">
+                                    </div>
+                                </form>
+                            </div>
+                            <div class="modal-footer">
+                                <input type="hidden" id="oCresponse" name="oCresponse" />
+                                <button type="button" class="btn btn-secondary" id="btnResendOtp">Resend</button>
+                                @* <a href="success.html" confirmCheckoutBtn class="btn btn-primary">Verify</a> *@
+                                <button class="btn btn-primary" name="btnprepaygiftingsubscribe" id="btnprepaygiftingsubscribe" type="submit" value="Subscribe">Verify</button>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+</div>
+
+<div class="row" id="success" style="display:none;">
+    <div class="col-xl-12">
+        <div class="card custom-card">
+            <div class="card-body">
+                <div class="container-fluid px-3 px-md-5">
+                    <div class="row g-4">
+                        <div class="container text-center">
+                            <div class="success-content-box p-md-5">
+                                <div class=" d-flex align-items-center justify-content-center">
+                                    <svg width="90px" height="auto" viewBox="0 0 1024.00 1024.00" class="icon" xmlns="http://www.w3.org/2000/svg" fill="#000000" stroke="#000000" stroke-width="3.072"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"><path fill="#39a300" d="M512 64a448 448 0 110 896 448 448 0 010-896zm-55.808 536.384l-99.52-99.584a38.4 38.4 0 10-54.336 54.336l126.72 126.72a38.272 38.272 0 0054.336 0l262.4-262.464a38.4 38.4 0 10-54.272-54.336L456.192 600.384z"></path></g></svg>
+                                </div>
+                                <h2 class="text-gray-900 mt-3" id="successTitle" > Subscription Successful</h2>
+                                <p class="mt-1">Dear Customer, thank you for your purchase on Vodafone eStore.</p>
+                                <div class="table-container">
+                                    <div class="table-responsive mt-1">
+                                        <table class="table table-bordered">
+                                            <tbody>
+                                                <tr>
+                                                    <td>Date</td>
+                                                    <td id="successDate"></td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Order Number</td>
+                                                    <td id="successOrderRef"></td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Email</td>
+                                                    <td id="successEmail"></td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Number</td>
+                                                    <td id="successNumber"></td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Amount</td>
+                                                    <td id="successAmount"></td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Plan Name</td>
+                                                    <td id="successPlanName"></td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                                <p class="mt-3">You will receive an Email and SMS pertaining to your transaction details. <br>Thank you for shopping with us.</p>
+
+                                <div class="mt-4 d-flex justify-content-center flex-wrap" id="ButtonContainer">
+                                    <!-- <a href="" class="btn btn-primary mb-2 mb-md-0 me-2">Chat</a> -->
+                                    <a href="/" class="btn btn-primary mb-2 mb-md-0 me-2">Customer Support</a>
+                                    <a href="plan-activation" class="btn btn-primary">Back</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<div class="row" id="fail" style="display:none;">
+    <div class="col-xl-12">
+        <div class="card custom-card">
+            <div class="card-body">
+                <div class="container-fluid px-3 px-md-5">
+                    <div class="row g-4">
+                        <div class="container text-center">
+                            <div class="success-content-box p-md-5">
+                                <div class=" d-flex align-items-center justify-content-center">
+                                    <svg fill="#d60000" width="90px" height="auto" viewBox="0 -8 528 528" xmlns="http://www.w3.org/2000/svg" stroke="#d60000" stroke-width="2.112"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"><title>fail</title><path d="M264 456Q210 456 164 429 118 402 91 356 64 310 64 256 64 202 91 156 118 110 164 83 210 56 264 56 318 56 364 83 410 110 437 156 464 202 464 256 464 310 437 356 410 402 364 429 318 456 264 456ZM264 288L328 352 360 320 296 256 360 192 328 160 264 224 200 160 168 192 232 256 168 320 200 352 264 288Z"></path></g></svg>
+                                </div>
+                                <h2 class="text-gray-900 mt-3" id="failTitle"> Subscription Fail</h2>
+
+                                <div class="table-container">
+                                    <div class="table-responsive mt-1">
+                                        <table class="table table-bordered">
+                                            <tbody>
+                                                <tr>
+                                                    <td>Date</td>
+                                                    <td id="failDate"></td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Order Number</td>
+                                                    <td id="failOrderRef"></td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Email</td>
+                                                    <td id="failEmail"></td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Number</td>
+                                                    <td id="failNumber"></td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Amount</td>
+                                                    <td id="failAmount"></td>
+                                                </tr>
+                                                <tr>
+                                                    <td>PlanName</td>
+                                                    <td id="failPlanName"></td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                                <p class="mt-3">You will receive an Email and SMS pertaining to your transaction details. <br>Thank you for shopping with us.</p>
+
+                                <div class="mt-4 d-flex justify-content-center flex-wrap" id="ButtonContainer">
+                                    <!-- <a href="" class="btn btn-primary mb-2 mb-md-0 me-2">Chat</a> -->
+                                    <a href="/" class="btn btn-primary mb-2 mb-md-0 me-2">Customer Support</a>
+                                    <a href="plan-activation" class="btn btn-primary">Back</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--End::row-1 -->
+<script src="~/scripts/subscriptionwidget/subscription.js" asp-append-version="true" section-name="Bottom"></script>

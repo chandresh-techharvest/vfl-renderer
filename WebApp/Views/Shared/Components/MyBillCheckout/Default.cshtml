@@ -1,0 +1,482 @@
+@model VFL.Renderer.ViewModels.MyBillCheckout.MyBillCheckoutViewModel
+
+@{
+    var sessionExpired = Model.SessionExpired;
+}
+
+<style>
+    .checkout-container {
+        background-color: #f8f9fa;
+        min-height: 100vh;
+        padding-bottom: 40px;
+    }
+    
+    .checkout-card {
+        background: #fff;
+        border: 1px solid #e0e0e0;
+        border-radius: 4px;
+    }
+    
+    .checkout-card-header {
+        background: #f5f5f5;
+        padding: 12px 16px;
+        border-bottom: 1px solid #e0e0e0;
+        font-weight: 600;
+        color: #1a1a2e;
+    }
+    
+    .checkout-card-body {
+        padding: 16px;
+    }
+    
+    .order-info-row {
+        display: flex;
+        justify-content: space-between;
+        padding: 8px 0;
+        border-bottom: 1px solid #f0f0f0;
+    }
+    
+    .order-info-row:last-child {
+        border-bottom: none;
+    }
+    
+    .order-info-label {
+        color: #666;
+    }
+    
+    .order-info-value {
+        font-weight: 500;
+        color: #1a1a2e;
+    }
+    
+    .payment-method-title {
+        font-size: 18px;
+        font-weight: 600;
+        color: #1a1a2e;
+        margin-bottom: 4px;
+    }
+    
+    .payment-method-subtitle {
+        color: #666;
+        font-size: 14px;
+        margin-bottom: 16px;
+    }
+    
+    .payment-option-card {
+        border: 2px solid #e0e0e0;
+        border-radius: 8px;
+        padding: 16px;
+        text-align: center;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        background: #fff;
+        min-width: 100px;
+    }
+    
+    .payment-option-card:hover {
+        border-color: #c0c0c0;
+    }
+    
+    .payment-option-card.selected {
+        border-color: #e60000;
+        background: #fff5f5;
+    }
+    
+    .payment-option-card img {
+        height: 32px;
+        object-fit: contain;
+        margin-bottom: 8px;
+    }
+    
+    .payment-option-card .payment-label {
+        font-size: 12px;
+        color: #333;
+        margin: 0;
+    }
+    
+    .payment-option-card input[type="radio"] {
+        display: none;
+    }
+    
+    .billing-section-title {
+        font-size: 18px;
+        font-weight: 600;
+        color: #1a1a2e;
+        margin: 24px 0 16px 0;
+    }
+    
+    .billing-form-label {
+        font-size: 14px;
+        font-weight: 500;
+        color: #1a1a2e;
+        margin-bottom: 6px;
+    }
+    
+    .billing-form-control {
+        border: 1px solid #e0e0e0;
+        border-radius: 4px;
+        padding: 10px 12px;
+        font-size: 14px;
+        width: 100%;
+    }
+    
+    .billing-form-control:focus {
+        border-color: #e60000;
+        outline: none;
+        box-shadow: 0 0 0 2px rgba(230, 0, 0, 0.1);
+    }
+    
+    .billing-form-control::placeholder {
+        color: #999;
+    }
+    
+    .checkout-buttons {
+        background: #e60000;
+        padding: 16px 24px;
+        display: flex;
+        justify-content: space-between;
+        margin-top: 24px;
+        border-radius: 4px;
+    }
+    
+    .btn-checkout-back {
+        background: transparent;
+        color: #fff;
+        border: 2px solid #fff;
+        padding: 10px 32px;
+        border-radius: 4px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        text-decoration: none;
+        display: inline-block;
+    }
+    
+    .btn-checkout-back:hover {
+        background: #fff;
+        color: #e60000;
+        text-decoration: none;
+    }
+    
+    .btn-checkout-proceed {
+        background: #fff;
+        color: #e60000;
+        border: none;
+        padding: 10px 32px;
+        border-radius: 4px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.2s ease;
+    }
+    
+    .btn-checkout-proceed:hover {
+        background: #f5f5f5;
+    }
+    
+    .btn-checkout-proceed:disabled {
+        background: #ccc;
+        color: #666;
+        cursor: not-allowed;
+    }
+    
+    .terms-checkbox {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        margin-top: 16px;
+    }
+    
+    .terms-checkbox input[type="checkbox"] {
+        width: 18px;
+        height: 18px;
+        accent-color: #e60000;
+    }
+    
+    .terms-checkbox label {
+        font-size: 14px;
+        color: #666;
+    }
+    
+    .terms-checkbox a {
+        color: #e60000;
+        text-decoration: underline;
+    }
+    
+    .partial-payment-section {
+        background: #f9f9f9;
+        border: 1px solid #e0e0e0;
+        border-radius: 4px;
+        padding: 16px;
+        margin-top: 16px;
+    }
+</style>
+
+<div id="checkout-view">
+    @if (sessionExpired)
+    {
+        <!-- Session Expired Message -->
+        <div class="row justify-content-center">
+            <div class="col-lg-6">
+                <div class="card custom-card shadow-sm">
+                    <div class="card-body text-center p-5">
+                        <div class="mb-4">
+                            <i class="ri-time-line text-warning" style="font-size: 4rem;"></i>
+                        </div>
+                        <h5 class="fw-semibold mb-3">Checkout Session Expired</h5>
+                        <p class="text-muted mb-4">
+                            Your checkout session has expired or is invalid.
+                            Please return to the dashboard and try again.
+                        </p>
+                        <a href="@Model.BackButtonUrl" class="btn btn-primary">
+                            <i class="ri-arrow-left-line me-2"></i> Return to Dashboard
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+    else
+    {
+        <div class="checkout-container">
+            <form>
+                @Html.AntiForgeryToken()
+
+                <!-- Hidden data from session -->
+                <input type="hidden" name="sid" value="@Model.SessionId" />
+                <input type="hidden" id="hdnInvoiceNumber" value="@Model.InvoiceNumber" />
+                <input type="hidden" id="hdnBanNumber" value="@Model.BanNumber" />
+                <input type="hidden" id="hdnTotalAmount" value="@Model.TotalAmount" />
+                <input type="hidden" id="hdnEmail" value="@Model.Email" />
+
+                <div class="container py-4">
+                    <!-- Top Section: Order Information + Payment Method -->
+                    <div class="row g-4">
+                        <!-- Left: Order Information -->
+                        <div class="col-lg-4">
+                            <div class="checkout-card h-100">
+                                <div class="checkout-card-header">
+                                    Order Information
+                                </div>
+                                <div class="checkout-card-body">
+                                    <div class="order-info-row">
+                                        <span class="order-info-label">Amount</span>
+                                        <span class="order-info-value" id="summaryAmount">$ @Model.PaymentAmount.ToString("F2")</span>
+                                    </div>
+                                    <div class="order-info-row">
+                                        <span class="order-info-label">Number</span>
+                                        <span class="order-info-value">@Model.BanNumber</span>
+                                    </div>
+                                    <div class="order-info-row">
+                                        <span class="order-info-label">Invoice</span>
+                                        <span class="order-info-value">@Model.InvoiceNumber</span>
+                                    </div>
+                                    
+                                    <!-- Partial Payment Option -->
+                                    <div class="partial-payment-section">
+                                        <div class="form-check mb-2">
+                                            <input class="form-check-input" type="checkbox" id="chkPartialPayment" 
+                                                   @(Model.IsPartialPayment ? "checked" : "")>
+                                            <label class="form-check-label fw-semibold" for="chkPartialPayment">
+                                                Pay Partial Amount
+                                            </label>
+                                        </div>
+                                        <div id="partialAmountSection" style="display: @(Model.IsPartialPayment ? "block" : "none")">
+                                            <div class="input-group input-group-sm">
+                                                <span class="input-group-text">$</span>
+                                                <input type="number" 
+                                                       class="form-control" 
+                                                       id="txtPartialAmount" 
+                                                       name="PaymentAmount"
+                                                       value="@Model.PaymentAmount.ToString("F2")" 
+                                                       min="10" 
+                                                       max="@Model.TotalAmount"
+                                                       step="0.01"
+                                                       placeholder="Enter amount" />
+                                            </div>
+                                            <small class="text-muted">Min: $10.00 | Max: $@Model.TotalAmount.ToString("F2")</small>
+                                            <div class="invalid-feedback" id="partialAmountError"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Right: Payment Method -->
+                        <div class="col-lg-8">
+                            <div class="checkout-card h-100">
+                                <div class="checkout-card-body">
+                                    <h5 class="payment-method-title">Payment Method</h5>
+                                    <p class="payment-method-subtitle">Please select a payment option:</p>
+                                    
+                                    <div class="d-flex flex-wrap gap-3">
+                                        <!-- M-PAISA -->
+                                        <label class="payment-option-card" for="paymentMPaisa">
+                                            <input type="radio" value="MPAISA" name="paymentMethod" id="paymentMPaisa">
+                                            <img src="~/images/img/payment-cards/14.png" alt="M-Paisa" />
+                                            <p class="payment-label">M-Paisa</p>
+                                        </label>
+
+                                        <!-- Mastercard -->
+                                        <label class="payment-option-card" for="paymentMastercard">
+                                            <input type="radio" name="paymentMethod" id="paymentMastercard" value="CARD">
+                                            <img src="~/images/img/payment-cards/5.png" alt="Mastercard" />
+                                            <p class="payment-label">Master card</p>
+                                        </label>
+
+                                        <!-- Visa -->
+                                        <label class="payment-option-card" for="paymentVisa">
+                                            <input type="radio" name="paymentMethod" value="CARD" id="paymentVisa">
+                                            <img src="~/images/img/payment-cards/6.png" alt="Visa" />
+                                            <p class="payment-label">Visa card</p>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Billing Address Section -->
+                    <div id="billingAddressSection" style="display:none;">
+                        <h5 class="billing-section-title">Billing Address</h5>
+                        
+                        <div class="checkout-card">
+                            <div class="checkout-card-body">
+                                <div class="row g-3">
+                                    <!-- Row 1: First Name, Last Name -->
+                                    <div class="col-md-6">
+                                        <label class="billing-form-label">First Name <span class="text-danger">*</span></label>
+                                        <input name="FirstName" class="form-control billing-form-control required-field" placeholder="First name" data-label="First name" />
+                                        <div class="invalid-feedback"></div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="billing-form-label">Last Name <span class="text-danger">*</span></label>
+                                        <input name="LastName" class="form-control billing-form-control required-field" placeholder="Last name" data-label="Last name" />
+                                        <div class="invalid-feedback"></div>
+                                    </div>
+
+                                    <!-- Row 2: Email, Phone Number -->
+                                    <div class="col-md-6">
+                                        <label class="billing-form-label">Email <span class="text-danger">*</span></label>
+                                        <input id="billingEmail" name="BillingEmail" class="form-control billing-form-control required-field" data-label="Email" />
+                                        <div class="invalid-feedback"></div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="billing-form-label">Phone Number <span class="text-danger">*</span></label>
+                                        <input name="BillingPhone" class="form-control billing-form-control required-field" placeholder="Phone number" data-label="Phone" />
+                                        <div class="invalid-feedback"></div>
+                                    </div>
+
+                                    <!-- Row 3: Address, Address 2 -->
+                                    <div class="col-md-6">
+                                        <label class="billing-form-label">Address <span class="text-danger">*</span></label>
+                                        <input name="Address1" class="form-control billing-form-control required-field" placeholder="1234 Main St" data-label="Address" />
+                                        <div class="invalid-feedback"></div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="billing-form-label">Address 2</label>
+                                        <input name="Address2" class="form-control billing-form-control" placeholder="Apartment, studio, or floor" />
+                                    </div>
+
+                                    <!-- Row 4: City, State -->
+                                    <div class="col-md-6">
+                                        <label class="billing-form-label">City <span class="text-danger">*</span></label>
+                                        <input name="City" id="inputCity" class="form-control billing-form-control required-field" placeholder="City" data-label="City" />
+                                        <div class="invalid-feedback"></div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="billing-form-label">State/Province <span class="text-danger">*</span></label>
+                                        <input name="State" class="form-control billing-form-control required-field" placeholder="State or Province" data-label="State" />
+                                        <div class="invalid-feedback"></div>
+                                    </div>
+
+                                    <!-- Row 5: Country, Postal -->
+                                    <div class="col-md-6">
+                                        <label class="billing-form-label">Country <span class="text-danger">*</span></label>
+                                        <select id="inputCountry" name="CountryCode" class="form-control form-select billing-form-control required-field" data-label="Country">
+                                            <option value="">Choose...</option>
+                                        </select>
+                                        <div class="invalid-feedback"></div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="billing-form-label">Postal Code <span class="text-danger">*</span></label>
+                                        <input name="PostalCode" class="form-control billing-form-control required-field" placeholder="Postal code" data-label="Postal code" />
+                                        <div class="invalid-feedback"></div>
+                                    </div>
+
+                                    <!-- Hidden fields for compatibility -->
+                                    <input type="hidden" name="Address3" value="" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Terms and Conditions (applies to all payment methods) -->
+                    <div class="checkout-card mt-4">
+                        <div class="checkout-card-body">
+                            <div class="terms-checkbox">
+                                <input type="checkbox" id="invalidCheck" required>
+                                <label for="invalidCheck">
+                                    Agree to <a href="@Model.TermsConditionsUrl" target="_blank">terms and conditions</a>
+                                </label>
+                            </div>
+                            <div class="invalid-feedback" id="termsError" style="display: none;">
+                                You must agree to the terms and conditions before submitting.
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Back and Proceed Buttons (under Billing Address section) -->
+                    <div class="checkout-buttons">
+                        <a href="@Model.BackButtonUrl" class="btn-checkout-back">@Model.BackButtonText</a>
+                        <button type="button" class="btn-checkout-proceed" id="placeOrderBtn">Proceed</button>
+                    </div>
+                </div>
+
+                <!-- Confirmation Modal -->
+                <div class="modal fade" id="exampleModalScrollable2" tabindex="-1" aria-labelledby="exampleModalScrollable2" data-bs-keyboard="false" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h6 class="modal-title" id="staticBackdropLabel2">Confirmation</h6>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body" id="confirmBody">
+                                <p>
+                                    You are about to pay your bill. Please review the details below before proceeding:
+                                </p>
+
+                                <table class="table table-bordered mt-3">
+                                    <tr>
+                                        <td><b>Invoice Number</b></td>
+                                        <td id="confirmInvoice">@Model.InvoiceNumber</td>
+                                    </tr>
+                                    <tr>
+                                        <td><b>BAN</b></td>
+                                        <td id="confirmBAN">@Model.BanNumber</td>
+                                    </tr>
+                                    <tr>
+                                        <td><b>Amount</b></td>
+                                        <td id="confirmAmount">$@Model.PaymentAmount.ToString("F2")</td>
+                                    </tr>
+                                    <tr>
+                                        <td><b>Payment Method</b></td>
+                                        <td id="confirmPayment">-</td>
+                                    </tr>
+                                </table>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                <button type="button" class="btn btn-primary" id="checkoutBtn">
+                                    Proceed
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    }
+</div>
+
+@* Add the checkout JavaScript with ASP.NET Core cache busting *@
+<script src="~/scripts/MyBillWidgets/mybill-checkout.js" asp-append-version="true"></script>

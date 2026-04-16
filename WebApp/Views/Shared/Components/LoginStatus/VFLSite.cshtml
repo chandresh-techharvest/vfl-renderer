@@ -1,0 +1,73 @@
+﻿@using Microsoft.AspNetCore.Mvc.Localization;
+
+@model Vfl.Renderer.ViewModels.LoginStatus.LoginStatusViewModel;
+
+@inject IViewLocalizer Localizer
+
+<script src="/libs/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+<div class="header-four-top-social-box">
+    <ul class="vdf-main-nav-list">
+        @if (Context.User != null && Context.User.Identity.IsAuthenticated)
+        {
+
+            <li class="vdf-nav-item-unique vdf-user-dropdown">
+                <a href="#" class="nav-link dropdown-toggle">
+                    Hello, @Model.Name
+                    <span class="vdf-custom-arrow">&#9662;</span>
+                </a>
+
+                <div class="mini-mega-menu">
+                    <div class="mega-menu-column">
+                        @if (Model.ProfilePage != null)
+                        {
+                            <a href="@Model.ProfilePage.ViewUrl">@Model.ProfilePage.Title</a>
+                        }
+                        @if (Model.UserDashboard != null)
+                        {
+                
+                            <a href="@Model.UserDashboard.ViewUrl">@Model.UserDashboard.Title</a>
+                        }
+                        @if (Model.Support != null)
+                                    {
+
+                            <a href="@Model.Support.ViewUrl">@Model.Support.Title</a>
+                        }                        
+                        <div class="vdf-dropdown-divider"></div>
+                        <a class="js-logout" href="#">@Localizer["Logout"]</a>                        
+                    </div>
+                </div>
+            </li>
+            @* var path = Context.Request.Scheme + "://" + Context.Request.Host + "/Sitefinity/SignOut";
+
+            <li class="nav-item header-four-top-location-box header-menu">
+                <a class="dropdown-item" href="@path" target="_self">@Localizer["Logout"]</a>
+            </li> *@
+        }
+        else
+        {
+
+            <div class="header-four-top-social-box">
+                <ul>
+                    <div class="header-four-top-location-box">
+                        @if (Model.LoginPage != null)
+                        {
+                            <a href="@Model.LoginPage.ViewUrl" target="_self"><i class="icon-map"></i>@Localizer["Login"]</a>
+                        }
+                        @* <a href="#"><i class="icon-map"></i>Sign In</a> *@
+                    </div>
+                    <div class="header-four-top-location-box header-menu">
+                        @if (Model.RegistrationPage != null)
+                        {
+                            <a href="@Model.RegistrationPage.ViewUrl" target="_self"><i class="icon-map"></i>@Localizer["RegisterNow"]</a>
+                        }
+                        @* <a href="#"><i class="icon-map"></i>My Vodafone</a> *@
+                    </div>
+                </ul>
+            </div>
+        }
+    </ul>
+
+</div>
+<script src="~/scripts/LoginWidgets/logout.js"></script>
+<script src="~/vendors/dist/sweetalert2.min.js"></script>

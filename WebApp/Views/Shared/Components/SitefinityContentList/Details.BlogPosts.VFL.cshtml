@@ -1,0 +1,80 @@
+﻿@using Progress.Sitefinity.AspNetCore.Mvc.Rendering
+@using Progress.Sitefinity.RestSdk
+@using Progress.Sitefinity.RestSdk.Dto
+@model Progress.Sitefinity.AspNetCore.Widgets.Models.ContentList.ContentDetailViewModel
+@inject Progress.Sitefinity.RestSdk.IRestClient restClient;
+@{
+    string classAttr = string.IsNullOrEmpty(Model.CssClass) ? null : Model.CssClass;
+}
+@{
+    var BlogImage = Model.GetFieldValue<ImageDto>("BlogImage");
+    var categories = await restClient.LoadTaxa<SdkItem>(Model.Item, "Categories");
+}
+<header class="sf-blog-header ">
+    @if (categories != null && categories.Count() > 0)
+    {
+        foreach (var category in categories)
+        {
+            <span class="sf-blog-category">
+                @(category.Title)
+            </span>
+        }
+    }
+
+    <h1 class="sf-blog-title">@(Model.Item.GetValue<string>("Title"))</h1>
+    <div class="sf-blog-meta">
+        <span>By <strong>@(Model.Item.GetValue<string>("Author"))</strong></span>
+        <span>•</span>
+        <span>@(Model.Item.GetValue<DateTime>("PublicationDate").ToString("MMM dd, yyyy"))</span>
+        <span>•</span>
+        @{
+            var content = Model.Item.GetValue<string>("Content");
+            var words = System.Text.RegularExpressions.Regex.Matches(content ?? "", @"\w+").Count;
+            var readTime = Math.Round(words / 225.0);
+        }
+        <span>@(readTime == 1 ? "1 min" : readTime + " mins") read</span>
+    </div>
+</header>
+
+<section class="sf-blog-featured">
+    <span class="sf-featured-label">Editor's Choice</span>
+    @if (Model.Item.GetValue<string>("BlogImage") != null)
+    {
+        <img src="@BlogImage.Url" alt="@BlogImage.AlternativeText">
+    }
+
+</section>
+
+<section class="sf-blog-layout container">
+    <div class="row">
+        <div class="col-md-8">
+            <main class="sf-blog-content">
+                <article class="sf-blog-body">
+                    @Html.HtmlSanitize(Model.Item.GetValue<string>("Content"))
+                </article>
+            </main>
+        </div>
+        <div class="col-md-4">
+            <aside class="sf-blog-sidebar">
+
+                <section class="sf-sidebar-card">
+                    <div class="sf-sidebar-title">Trending Now</div>
+                    <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Data Analytics">
+                    <p><strong>The Future of Data Privacy</strong><br>How new regulations in 2024 will impact your marketing stack.</p>
+                    <a href="#">Read Full Article →</a>
+                </section>
+
+                <section class="sf-sidebar-help">
+                    <h4 style="margin:0 0 10px; color:#e60000;">Need Assistance?</h4>
+                    <p style="font-size:14px; margin:0; color:#555; line-height:1.5;">
+                        Our support team is available 24/7 to help you optimize your workflow settings.
+                        <br><br>
+                        <strong>Call us:</strong> +1 (800) 555-0199<br>
+                        <strong>Email:</strong> help@example.com
+                    </p>
+                </section>
+
+            </aside>
+        </div>
+    </div>
+</section>

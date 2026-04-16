@@ -1,0 +1,250 @@
+﻿@model VFL.Renderer.ViewModels.Checkout.CheckoutViewModel
+
+Expired
+<form>
+
+
+    @Html.AntiForgeryToken()
+
+    <!-- hidden data coming from WebTopUp -->
+    <input type="hidden" name="Email" />
+    <input type="hidden" name="PhoneNumber" />
+    <input type="hidden" name="PlanCode" />
+    <input type="hidden" name="Amount" />
+    <input type="hidden" name="PaymentMethod" id="paymentMethod" />
+    <input type="hidden" name="sid"
+           value="@Context.Request.Query["sid"]" />
+
+    <!-- Start::row-1 -->
+    <div class="row">
+
+        <!-- LEFT -->
+        <div class="col-xl-9">
+
+            <!-- PAYMENT METHOD -->
+            <h5 class="fw-semibold">Payment Method</h5>
+
+            <div class="row mt-3">
+                <!-- M-PAISA -->
+                <div class="col-xxl-2 col-xl-3 col-sm-6">
+                    <div class="card custom-card">
+                        <div class="card-body text-center mx-auto">
+                            <input class="form-check-input payment-card border-0"
+                                   type="radio"
+                                   name="PaymentMethod"
+                                   value="MPAISA">
+                            <span class="payment-card-style">
+                                <img src="../assets/img/payment-cards/14.png" />
+                            </span>
+                            <p class="mb-0 fw-semibold">M-Paisa</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- CARD -->
+                <div class="col-xxl-2 col-xl-3 col-sm-6">
+                    <div class="card custom-card">
+                        <div class="card-body text-center mx-auto">
+                            <input class="form-check-input payment-card border-0"
+                                   type="radio"
+                                   name="PaymentMethod"
+                                   value="CARD">
+                            <span class="payment-card-style">
+                                <img src="../assets/img/payment-cards/5.png" />
+                            </span>
+                            <p class="mb-0 fw-semibold">Card</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- BILLING -->
+            <h5 class="fw-semibold mt-4">Billing Address</h5>
+
+            <div class="card custom-card mt-3">
+                <div class="card-body row g-3">
+
+
+                    <div class="col-md-6">
+                        <label class="form-label">First Name</label>
+                        <input name="FirstName" class="form-control" />
+                    </div>
+
+                    <div class="col-md-6">
+                        <label class="form-label">Last Name</label>
+                        <input name="LastName" class="form-control" />
+                    </div>
+
+                    <div class="col-md-6">
+                        <label class="form-label">Email</label>
+                        <input name="BillingEmail" class="form-control" />
+                    </div>
+
+                    <div class="col-md-6">
+                        <label class="form-label">Phone</label>
+                        <input name="BillingPhone" class="form-control" />
+                    </div>
+
+                    <div class="col-md-6">
+                        <label class="form-label">Address</label>
+                        <input name="Address1" class="form-control" />
+                    </div>
+
+                    <div class="col-md-6">
+                        <label class="form-label">Address 2</label>
+                        <input name="Address2" class="form-control" />
+                    </div>
+
+                    <div class="col-md-4">
+                        <label for="inputCountry" class="form-label">Country</label>
+                        <select id="inputCountry" name="Country" class="form-select">
+                            <option selected>Choose...</option>
+
+                        </select>
+                    </div>
+
+                    <div class="col-md-4">
+                        <label class="form-label">State</label>
+                        <input name="State" class="form-control" />
+                    </div>
+
+                    <div class="col-md-4">
+                        <label class="form-label">Postal</label>
+                        <input name="PostalCode" class="form-control" />
+                    </div>
+                    <div class="col-12 mt-4">
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" value="" id="invalidCheck" required>
+                            <label class="form-check-label" for="invalidCheck">
+                                Agree to terms and conditions
+                            </label>
+                            <div class="invalid-feedback">
+                                You must agree before submitting.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- RIGHT: SUMMARY -->
+        <div class="col-xl-3">
+            <div class="card custom-card">
+
+                <div class="card-header">
+                    <div class="card-title">Order Summary</div>
+                </div>
+
+                <div class="card-body">
+                    <p class="fw-semibold">WebTopUp</p>
+                    <p class="text-muted">@Model.PhoneNumber</p>
+                    <p class="fw-semibold fs-18">$@Model.Amount</p>
+                </div>
+
+                <div class="card-footer d-grid">
+                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModalScrollable2">Place Order</button>
+                    <div class="modal fade" id="exampleModalScrollable2" tabindex="-1" aria-labelledby="exampleModalScrollable2" data-bs-keyboard="false" aria-hidden="true">
+                        <!-- Scrollable modal -->
+                        <div class="modal-dialog modal-dialog-centered">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h6 class="modal-title" id="staticBackdropLabel2">Confirmation</h6>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <p>You are about to pay [amount] for Order WebTopUp. Please review your details before proceeding.Once confirmed, the payment will be processed securely.</p>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                    <button type="button" class="btn btn-primary" id="checkoutBtn">
+                                        Payment
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</form>
+
+<script src="~/scripts/WebTopUpWidget/Checkout.js" asp-append-version="true" section-name="Scripts"></script>
+<script>
+    /*
+
+       //country code json
+        async function loadCountries() {
+
+            try {
+                const response = await fetch("/scripts/WebTopUpWidget/countrycode.json");
+
+                if (!response.ok) {
+                    throw new Error("Failed to load country list");
+                }
+
+                const countries = await response.json();
+
+                const select = document.getElementById("inputCountry");
+                if (!select) return;
+
+                countries.forEach(country => {
+                    const option = document.createElement("option");
+                    option.value = country.code;
+                    option.textContent = country.name;
+                    select.appendChild(option);
+                });
+
+            } catch (error) {
+                console.error("Country load error:", error);
+            }
+        }
+
+
+        loadCountries();
+            document.getElementById("checkoutBtn").addEventListener("click", async function () {
+
+        const form = this.closest("form");
+        const formData = new FormData(form);
+
+        const response = await fetch("/Checkout/Submit", {
+            method: "POST",
+            headers: {
+                "RequestVerificationToken":
+                    form.querySelector('input[name="__RequestVerificationToken"]').value
+            },
+            body: formData
+        });
+
+         const respose = await fetch("api/default/Checkout/Submit", {
+            method: "POST",
+            headers: {
+                "RequestVerificationToken":
+                    form.querySelector('input[name="__RequestVerificationToken"]').value
+            },
+            body: formData
+        });
+
+        if (!response.ok) {
+            alert("Checkout failed");
+            return;
+        }
+
+        const result = await response.json();
+
+        if (result.redirectUrl) {
+            window.location.href = result.redirectUrl;
+        }
+    });
+
+    */
+</script>
+
+<script>
+    document.querySelectorAll("input[name='pm']").forEach(r => {
+        r.addEventListener("change", e => {
+            document.getElementById("paymentMethod").value = e.target.value;
+        });
+    });
+</script>

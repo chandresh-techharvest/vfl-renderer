@@ -1,0 +1,300 @@
+﻿@using Progress.Sitefinity.AspNetCore.Mvc.Rendering
+@using Progress.Sitefinity.AspNetCore.Web;
+@using VFL.Renderer.Models.Profile
+
+@model VFL.Renderer.Models.Profile.CustomProfileViewModel
+@inject IRenderContext renderContext;
+
+@{
+
+    var IsAuthenticated = this.User?.Identity?.IsAuthenticated ?? false;
+   
+
+}
+
+ @if (IsAuthenticated)
+    {
+        var lbls = Model.Labels;
+    
+    <div data-sf-role="profile-container"
+    data-sf-visibility-hidden="@Model.VisibilityClasses[Progress.Sitefinity.AspNetCore.Configuration.VisibilityStyle.Hidden]"
+    data-sf-invalid="@Model.InvalidClass"
+    class="@(string.IsNullOrEmpty(Model.CssClass) ? null : Model.CssClass)" @Html.BuildAttributes(Model.Attributes)>
+
+        <input type="hidden" name="ViewMode" value="@Model.ViewMode" />
+
+        <div data-sf-role="read-container" class="d-flex @((Model.ViewMode == CustomProfileViewMode.Read || Model.ViewMode == CustomProfileViewMode.ReadEdit)  ? "" : "d-none")">
+            <div class="flex-shrink-0">
+                <img src="@Model.AvatarUrl" width="100" />
+            </div>
+            <div class="flex-grow-1 ms-2">
+                <h2 class="mb-0">@Model.FirstName @Model.LastName</h2>
+                <p class="text-muted mb-3">@Model.Email</p>
+                @if (Model.ViewMode == CustomProfileViewMode.ReadEdit)
+                {
+                    <a href="javascript:void(0)" data-sf-role="editProfileLink">@lbls.EditProfileLink</a>
+                }
+            </div>
+        </div>
+
+        @if (Model.ViewMode == CustomProfileViewMode.Edit || Model.ViewMode == CustomProfileViewMode.ReadEdit)
+        {
+            bool disabled = !@renderContext.IsLive;
+            var firstNameInputId = Html.GetUniqueId("sf-first-name-");
+            var lastNameInputId = Html.GetUniqueId("sf-last-name-");
+            var emailInputId = Html.GetUniqueId("sf-email-");
+            var nicknameInputId = Html.GetUniqueId("sf-nickname-");
+            var aboutInputId = Html.GetUniqueId("sf-about-");
+            var passwordInputId = Html.GetUniqueId("sf-password-");
+            var fileUploadInputId = Html.GetUniqueId("sf-file-upload-");
+            var allowedAvatarFormatsId = Html.GetUniqueId("sf-allowed-avatar-formats");
+
+            var allowedAvatarFormats = Model.AllowedAvatarFormat != null ? string.Join(", ", Model.AllowedAvatarFormat) : "";
+
+            <div data-sf-role="form-container" class="@(Model.ViewMode == CustomProfileViewMode.Edit ? "row" : "d-none")">
+                <input type=hidden id="@allowedAvatarFormatsId" data-sf-role="sf-allowed-avatar-formats" value="@allowedAvatarFormats" />
+                <div data-sf-role="error-message-container" class="alert alert-danger d-none my-3" role="alert" aria-live="assertive"></div>
+                <div data-sf-role="success-message-container"
+                     class="alert alert-success my-3 d-none"
+                     role="alert" aria-live="assertive">
+                    @lbls.SuccessNotification
+                </div>
+                @* <div class="mb-3">
+                    <h2>
+                        @lbls.EditProfileHeader
+                    </h2>
+                </div> *@
+                <form method="post" action="@Model.UpdateProfileHandlerPath" role="form">
+                    <div data-sf-role="edit-profile-container" class="row">
+                        <div class="col-xxl-3 col-lg-4">
+                            <div class="card custom-card">
+                                <div class="card-body">
+                                    <div class="profile-container mb-4">
+                                        <div class="profile-setting-cover">
+                                            <img src="~/images/img/png-images/2.png" alt="" class="" id="profile-img2">
+                                            <div class="main-profile-cover-content">
+                                                <div class="text-center">
+                                                    <span class="avatar avatar-rounded chatstatusperson">
+                                                        @{
+                                                            var defaultAvatarUrl = string.IsNullOrEmpty(Model.AvatarUrl) ? "/images/default-source/assets/img/users" : Model.AvatarUrl;
+                                                        }
+                                                        <img class="chatimageperson" data-sf-role="sf-user-profile-avatar" src="@defaultAvatarUrl" alt="@Model.Email" width="100" name="Avatar" />
+                                                        @*  <span class="profile-upload">
+                                                            <i class="ri ri-pencil-line cursor-pointer"></i>
+                                                            <input type="file" class="absolute inset-0 w-full h-full opacity-0 " id="profile-change" data-sf-role="edit-profile-upload-picture-input" name="profile-change" style="display: none;" accept="@allowedAvatarFormats" />
+                                                        </span> *@
+                                                    </span>
+                                                </div>
+                                                <span class="background-upload">
+                                                    <i class="ri ri-pencil-line"></i>
+                                                    <input type="file" name="ProfileImage" data-sf-role="edit-profile-upload-picture-input" class="" id="profile-change2">
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    @* <nav class="nav nav-tabs flex-column nav-style-5" role="tablist">
+                                        <a class="nav-link  bg-light border active" data-bs-toggle="tab" role="tab" aria-current="page" href="#personal-info" aria-selected="true"><i class="ri ri-shield-user-line me-2 fs-18 align-middle"></i> Personal Settings</a>
+                                        <a class="nav-link  bg-light border mt-3" data-bs-toggle="tab" role="tab" aria-current="page" href="#email-settings" aria-selected="false" tabindex="-1"><i class="ri ri-lock-line me-2 fs-18 align-middle"></i>Password Settings</a>
+                                    </nav> *@
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-xxl-9 col-lg-8">
+                            <div class="card custom-card border-0">
+                                <div class="card-body p-0">
+                                    <div class="tab-content mt-lg-0 p-0">
+                                        <!-- Personal Information -->
+                                        <div class="tab-pane text-muted active show border-0 p-0" id="personal-info" role="tabpanel">
+                                            <div class="card custom-card mb-0">
+                                                <div class="card-header">
+                                                    <div class="card-title d-flex"><i class="ri ri-shield-user-line me-2"></i>Personal Settings</div>
+                                                </div>
+                                                <div class="card-body">
+                                                    <div class="row gy-4 mb-4">
+                                                        <div class="col-xl-6">
+                                                            <label for="first-name" class="form-label">First Name</label>
+                                                            <input id="@firstNameInputId" type="text" class="form-control" data-sf-role='required' name="FirstName" value="@Model.FirstName"/>                                                            
+                                                        </div>
+                                                        <div class="col-xl-6">
+                                                            <label for="last-name" class="form-label">Last Name</label>
+                                                            <input id="@lastNameInputId" type="text" class="form-control" data-sf-role='required' name="LastName" value="@Model.LastName" />
+                                                        </div>
+                                                        <div class="col-xl-6">
+                                                            <label for="last-name" class="form-label">Middle Name</label>
+                                                            <input type="text" class="form-control" name="MiddleName" id="last-name" placeholder="Last Name" value="@Model.MiddleName">
+                                                        </div>                                                        
+                                                        <div class="col-xl-12">
+                                                            <label for="Email" class="form-label">Email Address</label>
+                                                            <input id="@emailInputId" type="text" class="form-control" data-sf-role='required' name="Email" value="@Model.Email" />                                                            
+                                                        </div>
+                                                        <div class="col-xl-12">
+                                                            <input class="form-check-input" type="checkbox" value="false" id="changePassword" name="changePassword">
+                                                            <label class="form-check-label text-muted fw-normal" for="changePassword">
+                                                                Change Password?
+                                                            </label>
+                                                        </div>
+                                                        <div class="col-xl-12 NewPasswordWrapper">
+                                                            <label for="NewPassword" class="form-label">New  Password<sup class="text-danger">*</sup></label>
+                                                            <input type="Password" class="form-control" id="Password" name="Password" placeholder="New  Password">
+                                                        </div>
+                                                        <div class="col-xl-12 ConfirmPasswordWrapper">
+                                                            <label for="ConfirmPassword" class="form-label">Confirm   Password<sup class="text-danger">*</sup></label>
+                                                        <input type="Password" class="form-control" id="ConfirmPassword" name="ConfirmPassword" placeholder="Confirm   Password">
+                                                        </div>
+                                                       
+                                                    </div>
+                                                </div>
+                                                <div class="card-footer">
+                                                    <div class="text-end d-flex justify-content-end">
+                                                        <button class="btn btn-primary-light me-2"><i class="ri ri-refresh-line me-1"></i> Update </button>
+                                                        <button class="btn btn-secondary-light"><i class="ri ri-close-circle-line me-1"></i>Cancel</button>
+
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!-- Password Settings -->   
+                                        <div class="tab-pane text-muted  border-0 p-0" id="email-settings" role="tabpanel">
+                                            <div class="card custom-card mb-0">
+                                                <div class="card-header">
+                                                    <div class="card-title d-flex"><i class="ri ri-global-line me-2"></i>General Settings</div>
+                                                </div>
+                                                <div class="card-body p-0">
+                                                    <div class="row g-0">
+                                                        <div class="col-xl-12 p-4 border-end">
+                                                            <div class="row gy-3">
+                                                                <div class="col-xl-12">
+                                                                    <label for="Email-Id" class="form-label">Email Id<sup class="text-danger">*</sup></label>
+                                                                    <input type="text" class="form-control" id="Email-Id" placeholder="Email Id">
+                                                                </div>
+                                                                <div class="col-xl-12">
+                                                                    <label for="Password" class="form-label">Current Password<sup class="text-danger">*</sup></label>
+                                                                    <input type="Password" class="form-control" id="Password" placeholder="Current Password">
+                                                                </div>
+                                                                <div class="col-xl-12">
+                                                                    <label for="NewPassword" class="form-label">New  Password<sup class="text-danger">*</sup></label>
+                                                                    <input type="Password" class="form-control" id="NewPassword" placeholder="New  Password">
+                                                                </div>
+                                                                <div class="col-xl-12">
+                                                                    <label for="ConfirmPassword" class="form-label">Confirm   Password<sup class="text-danger">*</sup></label>
+                                                                    <input type="text" class="form-control" id="ConfirmPassword" placeholder="Confirm   Password">
+                                                                </div>
+                                                                <p class="fs-12 text-gray-500 text-muted">Password should be min of 
+                                                                    <b class="text-success">10 characters <sup>*</sup> </b> (and up to 100 characters),<b class="text-success">
+                                                                        One Upper Case Character<sup>*</sup></b> and <b class="text-success">One Special Character<sup>*</sup></b> 
+                                                                            e.g., ! @@ # ? included.
+                                                                    </p>
+                                                        
+                                                            </div>
+                                                        </div>
+                                                        
+                                                    </div>
+                                                    </div>
+                                                <div class="card-footer">
+                                                    <div class="text-end d-flex justify-content-end">
+                                                        <button class="btn btn-primary-light me-2"><i class="ri ri-refresh-line me-1"></i> Update </button>
+                                                        <button class="btn btn-secondary-light"><i class="ri ri-close-circle-line me-1"></i>Cancel</button>
+
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div data-sf-role="password-container" class="d-none">
+                        <div class="mb-3">
+                            @lbls.ChangeEmailLabel
+                        </div>
+                        <div class="mb-3">
+                            <label for="@passwordInputId" class="form-label">@lbls.PasswordLabel</label>
+                            <input id="@passwordInputId" type="password" class="form-control" name="Password" />
+                        </div>
+
+                    <div class="card-footer">
+                        <div class="text-end d-flex justify-content-end">
+                            <button class="btn btn-primary-light me-2"><i class="ri ri-refresh-line me-1"></i> Update </button>
+                            <button class="btn btn-secondary-light"><i class="ri ri-close-circle-line me-1"></i>Cancel</button>
+
+                        </div>
+                    </div>
+
+                    </div>
+
+                    @* <input class="btn btn-primary w-100" type="submit" value="@lbls.SaveChangesLabel" disabled="@disabled" /> *@
+                    <input type="hidden" name="Id" value="@Model.Id" />
+
+                    <input type="hidden" value="" name="sf_antiforgery" />
+                </form>
+
+                @if (Model.ViewMode == CustomProfileViewMode.Edit)
+                {
+                    <input type="hidden" name="PostUpdateAction" value="@Model.EditModeAction" />
+                    <input type="hidden" name="RedirectUrl" value="@Model.EditModeRedirectUrl" />
+                }
+
+                @if (Model.ViewMode == CustomProfileViewMode.ReadEdit)
+                {
+                    <input type="hidden" name="PostUpdateAction" value="@Model.ReadEditModeAction" />
+                    <input type="hidden" name="RedirectUrl" value="@Model.ReadEditModeRedirectUrl" />
+                }
+
+                <input type="hidden" name="InitialEmail" value="@Model.Email" />
+                <input type="hidden" name="ValidationRequiredMessage" value="@lbls.ValidationRequiredMessage" />
+                <input type="hidden" name="InvalidEmailErrorMessage" value="@lbls.InvalidEmailErrorMessage" />
+                <input type="hidden" name="InvalidPhotoErrorMessage" value="@lbls.InvalidPhotoErrorMessage" />
+                <input type="hidden" name="InvalidPasswordErrorMessage" value="@lbls.InvalidPasswordErrorMessage" />
+                <input type="hidden" name="ConfirmEmailChangeRequest" value="@Model.ConfirmEmailChangeRequest.ToString()" />
+                <input type="hidden" name="ConfirmEmailChangeError" value="@Model.ConfirmEmailChangeError.ToString()" />
+                <input type="hidden" name="ActivationMethod" value="@Model.ActivationMethod" />
+            </div>
+        }
+
+    </div>
+
+    @if (Model.ViewMode != CustomProfileViewMode.Read)
+    {
+        <div data-sf-role="confirm-email-change-container" class="d-none">
+            <div class="mb-3" data-sf-role="confirm-email-change-title">
+                <h2>
+                    @lbls.ConfirmEmailChangeTitleLabel
+                </h2>
+            </div>
+            <div class="mb-3" data-sf-role="confirm-email-change-message">
+                @string.Format(lbls.ConfirmEmailChangeDescriptionLabel, Model.Email)
+            </div>
+            <form method="post" action="@Model.SendAgainActivationLinkUrl" role="form">
+                <input type="hidden" name="Email" value="@Model.Email" />
+                <input type="hidden" name="Id" value="@Model.Id" />
+                <input type="hidden" name="ProviderName" value="@Model.ProviderName" />
+                <input class="btn btn-primary d-none" type="submit" value="@lbls.SendActivationLinkLabel" />
+            </form>
+            <input type="hidden" data-sf-role="show-send-again-activation-link" value="@Model.ShowSendAgainActivationLink.ToString()" />
+            <input type="hidden" data-sf-role="send-again-label" value="@lbls.SendAgainActivationLinkLabel" />
+            <input type="hidden" data-sf-role="confirm-email-change-success-title" value="@lbls.SendConfirmationLinkSuccessTitleLabel" />
+            <input type="hidden" data-sf-role="confirm-email-change-success-message" value="@string.Format(lbls.SendConfirmationLinkSuccessDescriptionLabel, Model.Email)" />
+        </div>
+    }
+
+    <script src="/vendors/jquery/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.5/dist/jquery.validate.js"></script>    
+   
+
+
+    <environment include="Development">
+        <script src="/scripts/LoginWidgets/profile.js" section-name="Bottom" assembly-ref="Progress.Sitefinity.AspNetCore.Widgets"></script>
+    </environment>
+     <environment exclude="Development">
+        <script src="/scripts/LoginWidgets/profile.js" section-name="Bottom" assembly-ref="Progress.Sitefinity.AspNetCore.Widgets"></script>
+    @* <script src="Scripts/LoginWidgets/profile.min.js" section-name="Bottom" assembly-ref="Progress.Sitefinity.AspNetCore.Widgets"></script> *@
+    </environment>
+
+ }
+    else
+    {
+
+    }

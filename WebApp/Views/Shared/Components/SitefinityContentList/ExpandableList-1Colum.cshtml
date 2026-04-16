@@ -1,0 +1,44 @@
+﻿@using Newtonsoft.Json
+@using Progress.Sitefinity.AspNetCore.Mvc.Rendering
+@using Progress.Sitefinity.RestSdk.Dto;
+@using VFL.Renderer.Dto
+
+@model Progress.Sitefinity.AspNetCore.Widgets.Models.ContentList.ContentListViewModel
+@{
+    var imageCss = Model.GetFieldCss("Image");
+    var titleCss = Model.GetFieldCss("Title");
+    var textCss = Model.GetFieldCss("Text");
+    var wrapperCss = Model.GetFieldCss("Content list");
+}
+
+<section style="max-width:960px;margin:40px auto;font-family:Arial, sans-serif;padding:0 20px;">
+    <h3><br></h3>
+    @foreach (var item in Model.Items)
+    {
+        var title = Model.GetFieldValue<string>(item, "Title");
+        var text = Model.GetFieldValue<string>(item, "Text");
+
+        <details style="border:1px solid #e5e5e5;border-radius:8px;margin-bottom:12px;box-shadow:0 2px 8px rgba(0,0,0,0.05);background:#ffffff;cursor:pointer;">
+            <summary style="padding:20px 28px;font-size:16px;font-weight:500;color:#000;display:flex;align-items:center;justify-content:space-between;list-style:none;outline:none;">
+                @title
+                <span style="float:right;width:24px;height:24px;border-radius:50%;border:2px solid #e60000;color:#e60000;display:inline-flex;align-items:center;justify-content:center;font-weight:bold;font-size:18px;">+</span>
+            </summary>
+            <div style="background:#fafbfc;padding:0 28px 24px;font-size:15px;color:#4a4d4e;line-height:1.5;border-top:1px solid #e5e5e5;">
+                <p style="margin-top:15px;">@Html.Raw(text)</p>
+            </div>
+        </details>
+    }
+</section>
+
+
+@if (Model.Pager != null)
+{
+    <div class="mt-2">
+        @await Html.PartialAsync("ContentPager", Model.Pager)
+    </div>
+}
+
+
+
+
+

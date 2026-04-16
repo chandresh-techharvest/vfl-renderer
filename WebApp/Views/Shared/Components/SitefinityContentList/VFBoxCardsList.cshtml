@@ -1,0 +1,44 @@
+﻿@using Progress.Sitefinity.AspNetCore.Mvc.Rendering
+@using Progress.Sitefinity.RestSdk.Dto;
+
+@model Progress.Sitefinity.AspNetCore.Widgets.Models.ContentList.ContentListViewModel
+@{
+    var imageCss = Model.GetFieldCss("Image");
+    var titleCss = Model.GetFieldCss("Title");
+    var textCss = Model.GetFieldCss("Text");
+    var wrapperCss = Model.GetFieldCss("Content list");
+}
+
+<div class="row">
+    @foreach (var item in Model.Items)
+    {
+        var image = Model.GetFirstRelatedMedia(item, "Image");
+        var thumbnail = image != null ? image.GetThumbnail() : null;
+        var title = Model.GetFieldValue<string>(item, "Title");
+        var text = Model.GetFieldValue<string>(item, "Text");
+
+        <div class="col-lg-4 col-lg-4 col-md-6 col-sm-12 text-center wow fadeInLeft animated"
+             data-wow-duration="1500ms" data-wow-delay="400ms">
+            <!-- services-four-box -->
+            <div class="services-four-box">
+                <h3>@title</h3>
+                <img class="@(imageCss)" src='@(image.Url)' alt='@(image.AlternativeText)' title='@(image.Title)' width="80px" />
+                <!--<i class="flaticon-cell_tower"></i>-->
+                <p>@Html.HtmlSanitize(text)</p>
+                <div class="services-four-btn">
+                    @{
+                        var itemUrl = Model.GetItemUrl(this.Context, item);
+                    }
+                    <a href="@itemUrl.ToString()" class="btn-read-more">Read More</a>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+@if (Model.Pager != null)
+{
+    <div class="mt-2">
+        @await Html.PartialAsync("ContentPager", Model.Pager)
+    </div>
+}

@@ -1,0 +1,149 @@
+﻿@model VFL.Renderer.ViewModels.LoginForm.CustomLoginFormViewModel
+@using VFL.Renderer.Models.LoginForm
+@using Progress.Sitefinity.AspNetCore.Mvc.Rendering
+@using Microsoft.Extensions.Configuration
+@inject IConfiguration Configuration
+
+@{
+    var lbls = Model.Labels;
+    var returnUrl = Model.GetDefaultReturnUrl(Context, false, false);
+    var returnErrorUrl = Model.GetDefaultReturnUrl(Context, true, false);
+    var usernameInputId = Html.GetUniqueId("sf-username-");
+    var passwordInputId = Html.GetUniqueId("sf-password-");
+    var rememberMeInputId = Html.GetUniqueId("sf-remember-");
+}
+@* <script src="/Scripts/LoginWidgets/login-form.js" section-name="Bottom"></script> *@
+
+@inject Microsoft.AspNetCore.Antiforgery.IAntiforgery Antiforgery
+@{
+    var requestToken = Antiforgery.GetAndStoreTokens(Context).RequestToken;
+}
+
+<input id="RequestVerificationToken" type="hidden" value="@requestToken" />
+<script src="https://accounts.google.com/gsi/client" async defer></script>
+<environment include="Development">
+    <script src="/scripts/LoginWidgets/login-form.js" section-name="Bottom" assembly-ref="Progress.Sitefinity.AspNetCore.Widgets"></script>
+</environment>
+<environment exclude="Development">
+    @* <script src="Scripts/LoginWidgets/login-form.min.js" section-name="Bottom" assembly-ref="Progress.Sitefinity.AspNetCore.Widgets"></script> *@
+    <script src="/scripts/LoginWidgets/login-form.js" section-name="Bottom" assembly-ref="Progress.Sitefinity.AspNetCore.Widgets"></script>
+</environment>
+
+<div data-sf-role="sf-login-form-container"
+     data-sf-visibility-hidden="@Model.VisibilityClasses[Progress.Sitefinity.AspNetCore.Configuration.VisibilityStyle.Hidden]"
+     data-sf-invalid="@Model.InvalidClass"
+     class="@(string.IsNullOrEmpty(Model.CssClass) ? null : Model.CssClass)"
+@Html.BuildAttributes(Model.Attributes)>
+    <div data-sf-role="form-container" class="authentication-cover">
+        <div class="aunthentication-cover-content">
+            <p class="h4 fw-bold mb-2 text-center">
+                @lbls.Header
+            </p>
+            @if (!string.IsNullOrEmpty(Model.RegistrationLink))
+            {
+                <div class="text-center">
+                    <p class="fs-14 text-muted mt-3">@lbls.NotRegisteredLabel <a href="@Model.RegistrationLink" class="text-primary fw-semibold">@lbls.RegisterLinkText</a></p>
+                </div>
+            }
+            @* @if (Model.ExternalProviders != null && Model.ExternalProviders.Any())
+            {
+                <div class="d-grid align-items-center">
+                    @foreach (var provider in Model.ExternalProviders)
+                    {
+                        <a data-sf-test="extPrv" class="btn btn-outline-light border shadow-sm @Model.GetExternalLoginButtonCssClass(provider.Name)" href="@Model.GetExternalLoginPath(Context, provider.Name)">
+                            <img src="~/images/authentication/social/1.png" class="w-4 h-4 me-2" alt="google-img">@provider.Title
+                        </a>                        
+                    }
+
+                </div>
+            } *@
+            <div class="d-grid align-items-center">
+                @* <a href="/api/LoginForm/GoogleLogin" class="btn btn-outline-light border shadow-sm">
+                    <img src="~/images/authentication/social/1.png" class="w-4 h-4 me-2" alt="google-img">Sign in with Google
+                </a> *@
+                <div id="g_id_onload" class="d-flex justify-content-center">
+                </div>
+                @* <div class="g_id_signin" data-type="standard"></div> *@
+            </div>
+            <div class="text-center my-3 authentication-barrier">
+                <span>OR</span>
+            </div>
+            <div id="errorContainer" class="my-3 @(Model.IsError(Context) ? "d-block" : "d-none")" role="alert" aria-live="assertive" data-sf-role="error-container">
+                <div id="errorMessage" class="alert alert-danger my-3" data-sf-role="error-message-container">
+                    @lbls.ErrorMessage
+                </div>
+                <div id="resendContainer" class="@(Model.IsError(Context) ? "d-block" : "d-none")" data-sf-role="resend-container">
+                    <div class="col-xl-12 d-grid mt-2">
+                        <input type="hidden" name="ModalVerificationUrl" id="ModalVerificationUrl" value="@Model.VerificationPageUrl" />
+                        <a href="javascript:void(0);" id="resendVerification" class="btn btn-lg vodafone-btn mt-1">Resend Verificaion Email</a>
+                    </div>
+                </div>
+            </div>
+            
+            <div id="successContainer" class="alert alert-success" role="alert" aria-live="assertive" data-sf-role="success-message-container">
+                
+            </div>
+           
+            <form action="@Model.LoginHandlerPath" class="row gy-3" method="post" role="form" novalidate>
+                <div class="col-xl-12">
+                    <label for="@usernameInputId" class="form-label text-default op=8">@lbls.EmailLabel</label>
+                    <input type="text" class="form-control form-control-lg" id="@usernameInputId" name="username" data-sf-role='required'>
+                </div>
+                <div class="mb-3">
+                    <label for="@passwordInputId" class="form-label text-default d-block">
+                        @lbls.PasswordLabel
+                        @if (!string.IsNullOrEmpty(Model.ForgottenPasswordLink))
+                        {                            
+                            <a href="@Model.ForgottenPasswordLink" class="float-end text-link">@lbls.ForgottenPasswordLinkLabel</a>
+                        }
+                    </label>
+                    <div class="input-group">
+                    <input type="password" class="form-control form-control-lg" id="@passwordInputId" name="password" data-sf-role='required'>
+                    </div>
+                </div>
+
+                @* @if (Model.RememberMe || !string.IsNullOrEmpty(Model.ForgottenPasswordLink))
+                {
+                    <div class="row mb-3">
+                        @if (Model.RememberMe)
+                        {
+                            <div class="checkbox col-md-6 m-0">
+                                <label>
+                                    @Html.CheckBoxFor(x => x.RememberMe, new
+                                        {
+                                            @id = rememberMeInputId
+                                        })
+                                    @Html.LabelFor(x => x.RememberMe, lbls.RememberMeLabel, new
+                                        {
+                                            @for = rememberMeInputId
+                                        })
+                                </label>
+                            </div>
+                        }
+                    </div>
+                } *@
+
+                <input type="hidden" name="RedirectUrl" value="@returnUrl" />
+                <input type="hidden" name="ErrorRedirectUrl" value="@returnErrorUrl" />
+                <input type="hidden" name="MembershipProviderName" value="@Model.MembershipProviderName" />
+                <input type="hidden" value="" name="sf_antiforgery" />
+                <div class="col-xl-12 d-grid mt-2">
+                    <input class="btn btn-lg vodafone-btn mt-1" type="submit" value="@lbls.SubmitButtonLabel" />
+                </div>
+                
+            </form>
+
+            <input type="hidden" name="ValidationInvalidEmailMessage" value="@lbls.ValidationInvalidEmailMessage" />
+            <input type="hidden" name="ValidationRequiredMessage" value="@lbls.ValidationRequiredMessage" />
+        </div>
+    </div>
+
+   @*  @if (Model.ExternalProviders != null && Model.ExternalProviders.Any())
+    {
+        <h3 class="mt-3">@lbls.ExternalProvidersHeader</h3>
+        @foreach (var provider in Model.ExternalProviders)
+        {
+            <a data-sf-test="extPrv" class="btn border fs-5 w-100 mt-2 @Model.GetExternalLoginButtonCssClass(provider.Name)" href="@Model.GetExternalLoginPath(Context, provider.Name)">@provider.Title</a>
+        }
+    } *@
+</div>

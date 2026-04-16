@@ -1,0 +1,19 @@
+﻿@using Progress.Sitefinity.AspNetCore.Mvc.Rendering
+@model Progress.Sitefinity.AspNetCore.Widgets.Models.ContentList.ContentDetailViewModel
+@{
+    string classAttr = string.IsNullOrEmpty(Model.CssClass) ? null : Model.CssClass;
+}
+
+<section class="cards-offers">
+	<div class="container">
+		<div class="row align-items-center">
+			<!-- section-main-title -->
+			<div class="section-main-title text-center">
+				<h2 class="mx-auto">@(Model.Item.GetValue<string>("Title"))</h2>
+			</div>
+			<div class="card-container">
+				@Html.HtmlSanitize(Model.Item.GetValue<string>("Content"))
+			</div>
+		</div>
+	</div>
+</section>

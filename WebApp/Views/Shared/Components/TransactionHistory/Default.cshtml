@@ -1,0 +1,111 @@
+﻿<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/choices.js/public/assets/styles/choices.min.css">
+<link rel="stylesheet" href="https://cdn.datatables.net/1.12.1/css/dataTables.bootstrap5.min.css">
+<link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.3.0/css/responsive.bootstrap.min.css">
+<link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.2.3/css/buttons.bootstrap5.min.css">
+
+<!-- Start::row-1 -->
+<div class="row">
+    <div class="col-xl-12">
+        <div class="card custom-card">
+            <div class="card-body">
+                <form class="row row-cols-lg-auto g-3 align-items-center">
+                    <div class="col-12">
+                        <div class="input-group">
+                            <label class="input-group-text" for="inputGroupSelect01">Transaction Type</label>
+                            <select class="form-select" id="ddlTransactionType">
+                                <option value="0" selected>Choose...</option>
+                                <option value="DirectTopUp">Direct Topup</option>
+                                <option value="PlanActivation">Plan Activation</option>
+                                <option value="WebTopUp">Web Topup</option>
+                                <option value="PurchasePlan">Purchase Plan</option>
+                                <option value="PrepayGift">Prepay Gift</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-12">
+                        <div class="input-group">
+                            <label class="input-group-text" for="inputGroupSelect01">Status</label>
+                            <select class="form-select" id="ddlTransactionStatus">
+                                <option value="0" selected>Choose...</option>
+                                <option value="Failed">Failed</option>
+                                <option value="Success">Success</option>
+                                <option value="InProgress">InProgress</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-12">
+                        <div class="input-group">
+                            <label class="input-group-text" for="inputGroupSelect01">Number</label>
+                            <input type="tel" class="form-control" id="txtNumber" placeholder="123 4567">
+                        </div>
+                    </div>
+                    <div class="col-12">
+                        <div class="form-group">
+                            <div class="input-group">
+                                <label class="input-group-text" for="FromDate">From</label>
+                                <input type="date" class="form-control" id="FromDate" placeholder="Date range picker">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12">
+                        <div class="form-group">
+                            <div class="input-group">
+                                <label class="input-group-text" for="ToDate">To</label>
+                                <input type="date" class="form-control" id="ToDate" placeholder="Date range picker">
+                            </div>
+                        </div>
+                    </div>
+
+
+
+                    <div class="col-12">
+                        <button type="button" id="btnSearch" class="btn btn-primary">Search</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<!--End::row-1 -->
+<!-- Start:: row-2 -->
+<div class="row">
+    <div class="col-xl-12">
+        <div class="card custom-card">
+            <div class="card-header">
+                <div class="card-title">
+                    Transaction History
+                </div>
+            </div>
+            <div class="card-body">
+                <table id="DirectTopUpDataTable" class="table table-bordered text-nowrap w-100">
+                </table>
+                <table id="WebTopUpDataTable" class="table table-bordered text-nowrap w-100">
+                </table>
+                <table id="PlanActivationDataTable" class="table table-bordered text-nowrap w-100">
+                </table>
+                <table id="PurchasePlanDataTable" class="table table-bordered text-nowrap w-100">
+                </table>
+                <table id="PrepayGiftDataTable" class="table table-bordered text-nowrap w-100">
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- End:: row-2 -->
+
+<script src="https://code.jquery.com/jquery-3.6.1.min.js" integrity="sha256-o88AwQnZB+VDvE9tvIXrMQaPlFFSUTR+nldQm1LuPXQ=" crossorigin="anonymous" asp-append-version="true" section-name="Bottom"></script>
+<script src="https://cdn.jsdelivr.net/npm/flatpickr" asp-append-version="true" section-name="Bottom"></script>
+<script src="~/scripts/date&time_pickers.js" asp-append-version="true" section-name="Bottom"></script>
+<script src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.min.js" asp-append-version="true" section-name="Bottom"></script>
+
+<script src="https://cdn.datatables.net/1.12.1/js/dataTables.bootstrap5.min.js" asp-append-version="true" section-name="Bottom"></script>
+<script src="https://cdn.datatables.net/responsive/2.3.0/js/dataTables.responsive.min.js" asp-append-version="true" section-name="Bottom"></script>
+<script src="https://cdn.datatables.net/buttons/2.2.3/js/dataTables.buttons.min.js" asp-append-version="true" section-name="Bottom"></script>
+<script src="https://cdn.datatables.net/buttons/2.2.3/js/buttons.print.min.js" asp-append-version="true" section-name="Bottom"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.6/pdfmake.min.js" asp-append-version="true" section-name="Bottom"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js" asp-append-version="true" section-name="Bottom"></script>
+<script src="https://cdn.datatables.net/buttons/2.2.3/js/buttons.html5.min.js" asp-append-version="true" section-name="Bottom"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js" asp-append-version="true" section-name="Bottom"></script>
+<script src="~/scripts/transactionhistorywidget/transactionhistory.js" asp-append-version="true" section-name="Bottom"></script>

@@ -1,0 +1,219 @@
+﻿@model VFL.Renderer.ViewModels.DirectTopUp.DirectTopUpViewModel
+
+@{
+    string TermsConditionsUrl = Model.TermsConditionsPage != null ? Model.TermsConditionsPage.ViewUrl : "#";
+}
+<div class="alert alert-danger d-none my-3" data-sf-role="error-message-container"></div>
+<!-- Start::row-1 -->
+<div class="row" id="topupform">
+    <div class="col-xl-12">
+        <div class="card custom-card">
+            <div class="card-body">
+                <h6 class="mb-4">Top Up any account with three simple steps.</h6>
+
+                <form class="row g-3 needs-validation" id="DirectTopup"  novalidate>
+                    <div class="row mt-3">
+                        <div class="col-md-6">
+                            <label for="rechargepin" class="form-label">Recharge PIN</label>
+                            <div class="input-group mb-3">
+                                <span class="input-group-text" id="basic-addon12">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor"
+                                         class="text-muted" viewBox="0 0 16 16">
+                                        <path d="M3.654 1.328a.678.678 0 0 1 1.015-.063L6.29 2.911c.328.329.445.81.293 1.243l-.547 1.548a.678.678 0 0 1-.588.439c-.295.03-.637.064-1.012.102a11.65 11.65 0 0 0 5.516 5.516c.038-.375.072-.717.102-1.012a.678.678 0 0 1 .439-.588l1.548-.547a1.02 1.02 0 0 1 1.243.293l1.646 1.621a.678.678 0 0 1-.063 1.015l-2.29 2.29c-.345.345-.82.515-1.29.45C5.885 13.86 2.14 10.115 1.095 5.572c-.065-.47.105-.945.45-1.29l2.29-2.29Z" />
+                                    </svg>
+                                </span>
+                                <input type="number" class="form-control" data-sf-role='required' name="rechargepin" data-label="Recharge Pin" placeholder="Recharge PIN" aria-label="Recharge PIN" aria-describedby="basic-addon12" id="rechargepin">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row mt-3">
+                        <div class="col-md-6">
+                            <label for="mobile_number" class="form-label">Mobile Number</label>
+                            <div class="input-group mb-3">
+                                <span class="input-group-text" id="basic-addon12">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor"
+                                         class="text-muted" viewBox="0 0 16 16">
+                                        <path d="M3.654 1.328a.678.678 0 0 1 1.015-.063L6.29 2.911c.328.329.445.81.293 1.243l-.547 1.548a.678.678 0 0 1-.588.439c-.295.03-.637.064-1.012.102a11.65 11.65 0 0 0 5.516 5.516c.038-.375.072-.717.102-1.012a.678.678 0 0 1 .439-.588l1.548-.547a1.02 1.02 0 0 1 1.243.293l1.646 1.621a.678.678 0 0 1-.063 1.015l-2.29 2.29c-.345.345-.82.515-1.29.45C5.885 13.86 2.14 10.115 1.095 5.572c-.065-.47.105-.945.45-1.29l2.29-2.29Z" />
+                                    </svg>
+                                </span>
+                                <input type="number" class="form-control" data-sf-role='required' data-label="Mobile Number" name="mobile_number" placeholder="Mobile number" aria-label="Mobile number" aria-describedby="basic-addon12" id="mobile_number">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-12">
+                        <div class="d-flex justify-content-end">
+                            <button id="btnContinue" class="btn btn-primary" style="width: 150px;" value="Continue">Continue</button>
+                        </div>
+
+                    </div>
+                </form>
+
+
+            </div>
+        </div>
+    </div>
+</div>
+<!--End::row-1 -->
+<!-- Start::row-2 -->
+<div class="row d-none" id="topupreview">
+    <div class="col-xl-12">
+        <div class="card custom-card">
+            <div class="card-body">
+                <div class="container-fluid">
+                    <!-- Confirmation and Verification Section -->
+                    <div class="row">
+                        <!-- Confirmation Section -->
+                        <div class="col-12 col-sm-8 col-lg-6">
+                            <h5>
+                                Information
+                            </h5>
+                            <div class="mt-2">
+                                <p class="text-muted fs-15" id="nameReview">Name: Nikhil Prasad</p>
+                                <p class="text-muted fs-15" id="emailReview">Email: nikhil.prasad@datec.com.fj</p>                                
+                            </div>
+
+                        </div>
+                        <div class="col-12 col-sm-8 col-lg-6">
+                            <h5>
+                                Top Up Information
+                            </h5>
+                            <div class="mt-2">
+                                <p class="text-muted fs-15" id="mobilenumberreview">Mobile number: 9261427</p>
+                                <p class="text-muted fs-15" id="pinreview">PIN: 32100 959 95</p>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" value="" id="agreeCheck" name="agreeCheck" required checked>
+                                    <label class="form-check-label" for="invalidCheck"><a href="@TermsConditionsUrl" class="text-primary fw-semibold"><u>Agree to terms and conditions</u> </a></label>
+                                </div>
+                            </div>
+                            <div class="d-flex justify-content-start mt-4 flex-row">
+                                <button id="btnBack" name="btnBack" class="btn btn-primary-light me-3">Back</button>
+                                <button id="btnConfirm" name="btnConfirm" class="btn btn-primary">Confirm</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!--End::row-2 -->
+<!-- Start::row-3 -->
+<div class="row d-none" id="topupsucess">
+    <div class="col-xl-12">
+        <div class="card custom-card">
+            <div class="card-body">
+                <div class="container-fluid px-3 px-md-5">
+                    <div class="row g-4">
+                        <div class="container text-center">
+                            <div class="success-content-box p-md-5">
+                                <div class=" d-flex align-items-center justify-content-center">
+                                    <svg width="90px" height="auto" viewBox="0 0 1024.00 1024.00" class="icon" xmlns="http://www.w3.org/2000/svg" fill="#000000" stroke="#000000" stroke-width="3.072"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"><path fill="#39a300" d="M512 64a448 448 0 110 896 448 448 0 010-896zm-55.808 536.384l-99.52-99.584a38.4 38.4 0 10-54.336 54.336l126.72 126.72a38.272 38.272 0 0054.336 0l262.4-262.464a38.4 38.4 0 10-54.272-54.336L456.192 600.384z"></path></g></svg>
+                                </div>
+                                <h2 class="text-gray-900 mt-3">Direct Top Up Successful</h2>
+                                <p class="mt-1">Dear Customer, thank you for your purchase on Vodafone eStore.</p>
+                                <div class="table-container">
+                                    <div class="table-responsive mt-1">
+                                        <table class="table table-bordered">
+                                            <tbody>
+                                                <tr>
+                                                    <td>Date</td>
+                                                    <td id="successDate">30/01/2025</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Order Number</td>
+                                                    <td id="successOrderNumber">ER444445</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Email</td>
+                                                    <td id="successEmail">test@gmail.com</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Number</td>
+                                                    <td id="successNumber">9995757</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Amount</td>
+                                                    <td id="successAmount">$16</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                                <p class="mt-3">You will receive an Email and SMS pertaining to your transaction details. <br>Thank you for shopping with us.</p>
+
+                                <div class="mt-4 d-flex justify-content-center flex-wrap" id="ButtonContainer">
+                                    <!-- <a href="" class="btn btn-primary mb-2 mb-md-0 me-2">Chat</a> -->
+                                    <a href="@Model.CustomerSupport.ViewUrl" class="btn btn-primary mb-2 mb-md-0 me-2">Customer Support</a>
+                                    @* <a href="index.html" class="btn btn-primary">Back</a> *@
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+<!--End::row-3 -->
+<!-- Start::row-4 -->
+<div class="row d-none" id="topupfail">
+    <div class="col-xl-12">
+        <div class="card custom-card">
+            <div class="card-body">
+                <div class="container-fluid px-3 px-md-5">
+                    <div class="row g-4">
+                        <div class="container text-center">
+                            <div class="success-content-box p-md-5">
+                                <div class=" d-flex align-items-center justify-content-center">
+                                    <svg fill="#d60000" width="90px" height="auto" viewBox="0 -8 528 528" xmlns="http://www.w3.org/2000/svg" stroke="#d60000" stroke-width="2.112"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"><title>fail</title><path d="M264 456Q210 456 164 429 118 402 91 356 64 310 64 256 64 202 91 156 118 110 164 83 210 56 264 56 318 56 364 83 410 110 437 156 464 202 464 256 464 310 437 356 410 402 364 429 318 456 264 456ZM264 288L328 352 360 320 296 256 360 192 328 160 264 224 200 160 168 192 232 256 168 320 200 352 264 288Z"></path></g></svg>
+                                </div>
+                                <h2 class="text-gray-900 mt-3">Direct Top Up Unsuccessful</h2>
+                                @* <p class="mt-1">Dear Customer, thank you for your purchase on Vodafone eStore.</p> *@
+                                <div class="table-container">
+                                    <div class="table-responsive mt-1">
+                                        <table class="table table-bordered">
+                                            <tbody>
+                                                <tr>
+                                                    <td>Date</td>
+                                                    <td id="failDate">30/01/2025</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Order Number</td>
+                                                    <td id="failOrderNumber">ER444445</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Email</td>
+                                                    <td id="failEmail">test@gmail.com</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Number</td>
+                                                    <td id="failNumber">9995757</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Amount</td>
+                                                    <td id="failAmount">$16</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                                @* <p class="mt-3">You will receive an Email and SMS pertaining to your transaction details. <br>Thank you for shopping with us.</p> *@
+
+                                <div class="mt-4 d-flex justify-content-center flex-wrap" id="ButtonContainer">
+                                    <!-- <a href="" class="btn btn-primary mb-2 mb-md-0 me-2">Chat</a> -->
+                                    <a href="@Model.CustomerSupport.ViewUrl" class="btn btn-primary mb-2 mb-md-0 me-2">Customer Support</a>
+                                    <button id="btnFailBack" name="btnFailBack" class="btn btn-primary-light me-3">Back</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+<!--End::row-4 -->
+<script src="~/scripts/directtopupwidget/directtopup.js" asp-append-version="true" section-name="Bottom"></script>

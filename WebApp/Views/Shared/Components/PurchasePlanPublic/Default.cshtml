@@ -1,0 +1,356 @@
+﻿@* @model VFL.Renderer.Models.PurchasePlan.PurchasePlanViewModel
+@if (!string.IsNullOrEmpty(Model.CheckoutPage?.UrlName))
+{
+    <input type="hidden"
+           id="hdnCheckoutPage"
+           value="@Model.CheckoutPage.UrlName" />
+}
+<link href="~/libs/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+<link href="~/styles/styles.css" rel="stylesheet" />
+
+<div class="row" id="purchaseplan-default-view">
+    <div class="col-xl-12">
+        <div class="card custom-card">
+            <div class="card-body">
+                <h6 class="mb-3">Now you can top up any Vodafone number 24/7 from anywhere in the world.</h6>
+                <div id="error-message" class="alert alert-danger" style="display:none;"></div>
+                <form class="row g-3 needs-validation" novalidate>
+                    <div class="col-md-12">
+                        <label for="email_address" class="form-label">Email address</label>
+                        <div class="input-group">
+                            <span class="input-group-text" id="basic-addon11">
+                                <svg class="text-muted" xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" viewBox="0 0 16 16">
+                                    <path d="M.05 3.555A2 2 0 0 1 2 2h12a2 2 0 0 1 1.95 1.555L8 8.414.05 3.555ZM0 4.697v7.104l5.803-3.558L0 4.697ZM6.761 8.83l-6.57 4.027A2 2 0 0 0 2 14h12a2 2 0 0 0 1.808-1.144l-6.57-4.027L8 9.586l-1.239-.757Zm3.436-.586L16 11.801V4.697l-5.803 3.546Z"></path>
+                                </svg>
+                            </span>
+                            <input type="text" class="form-control" placeholder="Email Address" aria-label="Username" aria-describedby="basic-addon11" id="email_address" name="email_address">
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <label for="mobile_number" class="form-label">Mobile Number</label>
+                        <div class="input-group mb-3">
+                            <span class="input-group-text" id="basic-addon12">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor"
+                                     class="text-muted" viewBox="0 0 16 16">
+                                    <path d="M3.654 1.328a.678.678 0 0 1 1.015-.063L6.29 2.911c.328.329.445.81.293 1.243l-.547 1.548a.678.678 0 0 1-.588.439c-.295.03-.637.064-1.012.102a11.65 11.65 0 0 0 5.516 5.516c.038-.375.072-.717.102-1.012a.678.678 0 0 1 .439-.588l1.548-.547a1.02 1.02 0 0 1 1.243.293l1.646 1.621a.678.678 0 0 1-.063 1.015l-2.29 2.29c-.345.345-.82.515-1.29.45C5.885 13.86 2.14 10.115 1.095 5.572c-.065-.47.105-.945.45-1.29l2.29-2.29Z" />
+                                </svg>
+                            </span>
+                            <input type="number" class="form-control" placeholder="Mobile Number" aria-label="Email Address" aria-describedby="basic-addon12" id="mobile_number"
+                                   name="mobile_number">
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <button type="button" id="btnContinue" class="btn btn-primary" >
+
+                            Continue
+                        </button>
+                    </div>
+
+
+
+                </form>
+            </div>
+
+
+        </div>
+    </div>
+</div>
+
+
+<!--End::row-1 -->
+<!--purchase plan -->
+<!-- Start::row-1 -->
+<div class="row" id="selected-plan-view" style="display:none;">
+    <div class="col-xl-12">
+        <div class="card custom-card">
+            <div class="card-body">
+                <ul class="nav nav-tabs tab-style-1 d-sm-flex d-block" role="tablist">
+                    <li class="nav-item">
+                        <a class="nav-link active" data-bs-toggle="tab" data-bs-target="#4gplans" href="#4gplans">4G Plans</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" data-bs-toggle="tab" data-bs-target="#5gplans" href="#5gplans">5G Plans</a>
+                    </li>
+                </ul>
+                <div class="tab-content">
+                    <div class="tab-pane active" id="4gplans" role="tabpanel">
+                        <div class="row">
+                            <div class="col-xl-12">
+                                <div class="card custom-card bg-light">
+                                    <div class="card-body">
+                                        <form class="row row-cols-lg-auto g-3 align-items-center">
+                                            <div class="col-12">
+                                                <div class="input-group">
+                                                    <label class="input-group-text" for="inputGroupSelect01">Plan Type</label>
+                                                    <select class="form-select" id="planTypeFilter">
+
+                                                        <option value="">All Categories</option>
+
+                                                        @if (Model?.PlanTypes != null)
+                                                        {
+                                                            foreach (var type in Model.PlanTypes)
+                                                            {
+                                                                <option value="@type.Identifier">
+                                                                    @type.Name
+                                                                </option>
+                                                            }
+                                                        }
+
+                                                    </select>
+
+                                                </div>
+                                            </div>
+                                            <div class="col-12">
+                                                <div class="input-group">
+                                                    <label class="input-group-text" for="inputGroupSelect01">Payment Type</label>
+                                                    <select class="form-select" id="paymentTypeFilter">
+
+                                                        <option value="">All Categories</option>
+
+                                                        @if (Model?.PaymentMethods != null && Model.PaymentMethods.Any())
+                                                        {
+                                                            foreach (var method in Model.PaymentMethods)
+                                                            {
+                                                                <option value="@method.Identifier">
+                                                                    @method.Name
+                                                                </option>
+                                                            }
+                                                        }
+
+                                                    </select>
+
+                                                </div>
+                                            </div>
+                                            <div class="col-12">
+                                                <div class="input-group">
+                                                    <label class="input-group-text" for="inputGroupSelect01">Sort By</label>
+                                                    <select class="form-select" id="sortFilter">
+                                                        <option value="price_asc">Price: Low to High</option>
+                                                        <option value="price_desc">Price: High to Low</option>
+                                                        <option value="data_asc">Data: Low to High</option>
+                                                        <option value="data_desc">Data: High to Low</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="d-flex flex-wrap justify-content-start gap-3 py-2">
+                            <div class="row g-3 plan-selector" id="plansContainer">
+
+
+
+                               
+
+
+
+                            </div>
+                        </div>
+
+
+
+                        <!-- Pagination -->
+                        <nav aria-label="Page navigation" class=" pagination-style-3 mt-3">
+                            <ul class="pagination mb-0 flex-wrap" id="pagination4g"></ul>
+                        </nav>
+                    </div>
+
+                    <div class="tab-pane" id="5gplans" role="tabpanel">
+                        <div class="row">
+                            <div class="col-xl-12">
+                                <div class="card custom-card bg-light">
+                                    <div class="card-body">
+                                        <form class="row row-cols-lg-auto g-3 align-items-center">
+                                            <div class="col-12">
+                                                <div class="input-group">
+                                                    <label class="input-group-text" for="inputGroupSelect01">Plan Type</label>
+                                                    <select class="form-select" id="planTypeFilter5g">
+                                                        <option value="">All Categories</option>
+
+                                                        @if (Model?.PlanTypes != null)
+                                                        {
+                                                            foreach (var type in Model.PlanTypes)
+                                                            {
+                                                                <option value="@type.Identifier">
+                                                                    @type.Name
+                                                                </option>
+                                                            }
+                                                        }
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="col-12">
+                                                <div class="input-group">
+                                                    <label class="input-group-text" for="inputGroupSelect01">Payment Type</label>
+                                                    <select class="form-select" id="paymentTypeFilter5g">
+                                                        <option selected value="">All Categories</option>
+                                                        @if (Model?.PaymentMethods != null && Model.PaymentMethods.Any())
+                                                        {
+                                                            foreach (var method in Model.PaymentMethods)
+                                                            {
+                                                                <option value="@method.Identifier">
+                                                                    @method.Name
+                                                                </option>
+                                                            }
+                                                        }
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="col-12">
+                                                <div class="input-group">
+                                                    <label class="input-group-text" for="inputGroupSelect01">Sort By</label>
+                                                    <select class="form-select" id="sortFilter5g">
+                                                        <option selected>Price: Low to High</option>
+                                                        <option value="1">Price: High to Low</option>
+                                                        <option value="2">Data: Low to High</option>
+                                                        <option value="3">Data: High to Low</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="d-flex flex-wrap justify-content-start gap-3 py-2">
+                            <div class="row g-3 plan-selector" id="plansContainer5g">
+
+                                
+
+                            </div>
+                        </div>
+
+                        <!-- Pagination -->
+                        <nav aria-label="Page navigation" class=" pagination-style-3 mt-3">
+                            <ul class="pagination mb-0 flex-wrap" id="pagination5g"></ul>
+                        </nav>
+                    </div>
+
+
+                </div>
+                <div class="row">
+                    <div class="col-md-12 mt-3">
+                        <div class="d-flex justify-content-between">
+                            <a href="purchaseplan" class="btn btn-primary" style="width: 100px;">Previous</a>
+                            <a href="OTP-option2.html" class="btn btn-primary" style="width: 100px;" data-bs-toggle="modal" data-bs-target="#ModalConfirmation-purchaseplan">Continue</a>
+                        </div>
+                    </div>
+
+                    <!-- confirmation modal -->
+                    <div class="modal fade" id="ModalConfirmation-purchaseplan" tabindex="-1"
+                         aria-labelledby="exampleModalScrollable2" data-bs-keyboard="false"
+                         aria-hidden="true">
+                        <!-- Scrollable modal -->
+                        <div class="modal-dialog modal-dialog-centered">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h6 class="modal-title" id="staticBackdropLabel2">
+                                        Confirmation
+                                    </h6>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                            aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <p>Dear <span id="confirmUser"></span>,</p>
+                                    <p>You are about to Purchase the following plan:</p>
+
+                                    <ul class="list-unstyled mb-3">
+                                        <li><strong>Plan Name:</strong> <span id="confirmPlan"></span></li>
+                                        <li><strong>Price:</strong> <span id="confirmPrice"></span></li>
+                                        <li><strong>Data:</strong> [data]</li>
+                                        <li><strong>Voice Minutes:</strong> [voice_minutes]</li>
+                                        <li><strong>SMS:</strong> [sms]</li>
+                                        <li><strong>Mobile Number:</strong> <span id="confirmNumber"></span></li>
+                                    </ul>
+
+                                    <p>Do you wish to continue with the subscription?</p>
+                                </div>
+
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                    <button type="button"
+                                            class="btn btn-primary"
+                                            id="confirmCheckoutBtn">
+                                        Confirm
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- OTP Option -->
+                    <div class="modal fade" id="exampleModalScrollable2" tabindex="-1" aria-labelledby="exampleModalScrollable2" data-bs-keyboard="false" aria-hidden="true">
+
+                        <div class="modal-dialog modal-dialog-centered">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h6 class="modal-title" id="staticBackdropLabel2">Select OTP Verification Method</h6>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <form>
+                                        <div class="d-flex flex-column align-items-center gap-2">
+                                            <div class="form-check form-check-md">
+                                                <input class="form-check-input" type="radio" name="Radio" id="Radio-md" style="border: 1px solid rgb(117, 117, 117);">
+                                                <label class="form-check-label" for="Radio-md"> Receive OTP via your mobile number</label>
+                                            </div>
+                                            <div class="form-check form-check-md">
+                                                <input class="form-check-input" type="radio" name="Radio" id="Radio-md" style="border: 1px solid rgb(117, 117, 117);" ">
+                                                <label class="form-check-label" for="Radio-md"> Receive OTP via your email address</label>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary"
+                                            data-bs-dismiss="modal">
+                                        Close
+                                    </button>
+                                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#otpmodal">verify</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- OTP -->
+                    <div class="modal fade" id="otpmodal" tabindex="-1" aria-labelledby="otpmodal" data-bs-keyboard="false" aria-hidden="true">
+                        <!-- Scrollable modal -->
+                        <div class="modal-dialog modal-dialog-centered">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h6 class="modal-title" id="staticBackdropLabel2">OTP Verification</h6>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <p class="mb-4">Please enter the 4 digit code sent to ********25</p>
+                                    <form>
+                                        <div class="mb-3">
+                                            <input type="number" class="form-control" id="device-name">
+                                        </div>
+                                    </form>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-primary">Resend</button>
+                                    <a href="success.html" class="btn btn-primary">Verify</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+</div>
+<!--End::row-1 -->
+
+<script src="~/libs/bootstrap/js/bootstrap.bundle.min.js"></script>
+<script src="~/scripts/purchaseplanwidget/purchaseplanpublic.js"></script> *@

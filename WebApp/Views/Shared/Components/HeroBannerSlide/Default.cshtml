@@ -1,0 +1,112 @@
+﻿@using Progress.Sitefinity.AspNetCore.Mvc.Rendering
+@using VFL.Renderer.ViewModels.HeroBannerSlide;
+@using VFL.Renderer.Dto;
+
+@model IList<VFL.Renderer.ViewModels.HeroBannerSlide.ItemViewModel>
+
+@{
+    var first = Model.FirstOrDefault();
+}
+
+<section class="banner-one">
+
+    <div id="carouselExample" class="carousel slide carousel-fade" data-bs-ride="carousel">
+        <div class="carousel-inner">
+            @for (var i = 0; i < this.Model.Count; i++)
+            {
+                var item = this.Model[i];
+                var textClass = item.IsTextLight ? "text-light" : "text-dark";
+                if (item.VideoLink != null)
+                {
+                    <!-- Video Slide with Fallback -->
+                    <div class="carousel-item slide-@i @(item.Equals(first) ? "active" : null)">
+                        <video autoplay muted loop playsinline poster="(@item.SlideImage)">
+                            <source src="@item.VideoLink" type="video/mp4">
+                            <!-- If video format not supported -->
+                        </video>
+                        @if (!string.IsNullOrEmpty(item.SlideImage))
+                        {
+                            <img src="@item.SlideImage" alt="Fallback Image" class="fallback-image">
+                        }
+                        <div class="carousel-caption-left @textClass">
+                            @if (!string.IsNullOrEmpty(item.SubTitle))
+                            {
+                                <h1>@item.SubTitle</h1>}
+                            @if (!string.IsNullOrEmpty(item.Description))
+                            {
+                                <p>@item.Description</p>
+                            }
+                            @if (!string.IsNullOrEmpty(item.ButtonText1))
+                            {
+                                <a href="@item.ButtonLink1" class="btn btn btn-bg-primary">@item.ButtonText1</a>
+                            }
+                            @if (!string.IsNullOrEmpty(item.ButtonText2))
+                            {
+                                <a href="@item.ButtonLink2" class="btn btn-bg-white-two">@item.ButtonText2</a>
+                            }
+                        </div>
+                    </div>
+                }
+                else
+                {
+                    <!-- Image Slide -->
+                    <div class="carousel-item slide-@i @(item.Equals(first) ? "active" : null)" style="background-image: url('@item.SlideImage');">
+                        <picture>
+                            @if (!string.IsNullOrEmpty(item.SlideMobileImage))
+                            {
+                                <!-- Mobile image -->
+                                <source media="(max-width: 767px)" srcset="@item.SlideMobileImage">
+                            }
+                            @if (!string.IsNullOrEmpty(item.SlideImage))
+                            {
+                                <!-- Tablet -->
+                                <source media="(max-width: 1199px)" srcset="@item.SlideImage">
+                                <!-- Desktop -->
+                                <img src="@item.SlideImage" class="cover-center">
+                            }
+                        </picture>
+                        <div class="carousel-caption-left @textClass">
+                            @if (!string.IsNullOrEmpty(item.SubTitle)){
+                            <h1>@item.SubTitle</h1>
+                            }
+                            @if (!string.IsNullOrEmpty(item.Description)){
+                            <p>@Html.HtmlSanitize(item.Description)</p>
+                            }
+                            @if (!string.IsNullOrEmpty(item.ButtonText1))
+                            {
+                                <a href="@item.ButtonLink1" class="btn btn btn-bg-primary">@item.ButtonText1</a>
+                            }
+                            @if (!string.IsNullOrEmpty(item.ButtonText2))
+                            {
+                                <a href="@item.ButtonLink2" class="btn btn-bg-white-two">@item.ButtonText2</a>
+                            }
+                        </div>
+                    </div>
+                }
+
+            }
+        </div>
+
+        <!-- Bottom bar -->
+        <div class="carousel-bottom-bar">
+            <!-- Prev -->
+            <button class="carousel-control-prev" type="button" data-bs-target="#carouselExample" data-bs-slide="prev">
+                <span class="carousel-control-prev-icon"></span>
+            </button>
+
+            <!-- Titles as controls -->
+            <div class="carousel-titles">
+                @for (var i = 0; i < this.Model.Count; i++)
+                {
+                    var item = this.Model[i];
+                    <button type="button" data-bs-target="#carouselExample" data-bs-slide-to="@i" class="@(item.Equals(first) ? "active" : null)">@item.Title</button>
+                }
+            </div>
+
+            <!-- Next -->
+            <button class="carousel-control-next" type="button" data-bs-target="#carouselExample" data-bs-slide="next">
+                <span class="carousel-control-next-icon"></span>
+            </button>
+        </div>
+    </div>
+</section>

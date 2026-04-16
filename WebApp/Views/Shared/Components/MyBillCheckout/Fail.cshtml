@@ -1,0 +1,70 @@
+@model VFL.Renderer.ViewModels.MyBillCheckout.MyBillCheckoutViewModel
+
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card custom-card shadow-sm">
+                <div class="card-body">
+                    <div class="text-center p-md-5">
+                        <div class="d-flex align-items-center justify-content-center mb-4">
+                            <svg fill="#d60000" width="90px" height="90px" viewBox="0 0 528 528" stroke="#d60000" stroke-width="2.112" xmlns="http://www.w3.org/2000/svg">
+                                <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                                <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
+                                <g id="SVGRepo_iconCarrier">
+                                    <title>fail</title>
+                                    <path d="M264 456Q210 456 164 429 118 402 91 356 64 310 64 256 64 202 91 156 118 110 164 83 210 56 264 56 318 56 364 83 410 110 437 156 464 202 464 256 464 310 437 356 410 402 364 429 318 456 264 456ZM264 288L328 352 360 320 296 256 360 192 328 160 264 224 200 160 168 192 232 256 168 320 200 352 264 288Z"></path>
+                                </g>
+                            </svg>
+                        </div>
+
+                        <h2 class="text-danger mb-3">Bill Payment Unsuccessful</h2>
+                        <p class="text-muted mb-4">Dear Customer, we were unable to process your payment.</p>
+
+                        <div class="alert alert-danger mb-4" id="errorMessageAlert" style="display: none;">
+                            <strong>Error:</strong> <span id="errorMessageText"></span>
+                        </div>
+
+                        <div class="table-responsive">
+                            <table class="table table-bordered">
+                                <tbody>
+                                    <tr>
+                                        <td class="fw-bold" style="width: 40%;">Date</td>
+                                        <td id="resultDate">-</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="fw-bold">Order Number</td>
+                                        <td id="resultOrderRef">-</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="fw-bold">Customer</td>
+                                        <td id="resultEmail">-</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="fw-bold">Invoice Number</td>
+                                        <td id="resultInvoice">-</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="fw-bold">Amount</td>
+                                        <td id="resultAmount">-</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <p class="mt-4 text-muted">
+                            If you believe this is an error, please contact our support team.<br>
+                            You may also try making the payment again.
+                        </p>
+
+                        <div class="mt-4 d-flex justify-content-center flex-wrap gap-2">
+                            <a href="@Model.CustomerSupportUrl" class="btn btn-outline-primary">Customer Support</a>
+                            <a href="@Model.DashboardUrl" class="btn btn-primary">Back to Dashboard</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="~/scripts/MyBillWidgets/mybill-checkout-fail.js" asp-append-version="true"></script>

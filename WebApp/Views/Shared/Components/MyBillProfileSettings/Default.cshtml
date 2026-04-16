@@ -1,0 +1,148 @@
+@model VFL.Renderer.ViewModels.MyBillProfileSettings.MyBillProfileSettingsViewModel
+
+<div id="myBillProfileSettings" class="mybill-profile-settings-widget" data-authenticated="@Model.IsAuthenticated.ToString().ToLower()">
+    @if (Model.IsDesignerMode)
+    {
+        <div class="alert alert-info">
+            <i class="ri-information-line"></i> MyBill Profile Settings Widget - Preview Mode
+        </div>
+    }
+
+    <div class="row">
+        <div class="col-xxl-3 col-lg-4">
+            <div class="card custom-card">
+                <div class="card-body">
+                    <nav class="nav nav-tabs flex-column nav-style-5" role="tablist">
+                        <a class="nav-link bg-light border active" data-bs-toggle="tab" role="tab" aria-current="page" href="#personal-info" aria-selected="true">
+                            <i class="ri-shield-user-line me-2 fs-18 align-middle"></i> Account Settings
+                        </a>
+                        <a class="nav-link bg-light border mt-3" data-bs-toggle="tab" role="tab" aria-current="page" href="#password-settings" aria-selected="false" tabindex="-1">
+                            <i class="ri-lock-line me-2 fs-18 align-middle"></i> Password Settings
+                        </a>
+                    </nav>
+                </div>
+            </div>
+        </div>
+        <div class="col-xxl-9 col-lg-8">
+            <div class="card custom-card border-0">
+                <div class="card-body p-0">
+                    <div class="tab-content mt-lg-0 p-0">
+                        <!-- Personal Information -->
+                        <div class="tab-pane text-muted active show border-0 p-0" id="personal-info" role="tabpanel">
+                            <div class="card custom-card mb-0">
+                                <div class="card-header">
+                                    <div class="card-title d-flex">
+                                        <i class="ri-shield-user-line me-2"></i> Personal Settings
+                                    </div>
+                                </div>
+                                <div class="card-body">
+                                    <form id="profileUpdateForm">
+                                        <!-- Alert messages -->
+                                        <div id="profileAlert" class="alert d-none" role="alert"></div>
+
+                                        <!-- Hidden BAN field -->
+                                        <input type="hidden" id="selectedBan" value="@(Model.SelectedBan ?? "")" />
+                                        
+                                        <div class="row gy-4 mb-4">
+                                            <div class="col-xl-6">
+                                                <label for="accountName" class="form-label">Account Name <span class="text-danger">*</span></label>
+                                                <input type="text" class="form-control" id="accountName" placeholder="Account Name" value="@(Model.AccountName ?? "")" required />
+                                            </div>
+                                            <div class="col-xl-6">
+                                                <label for="contactFullName" class="form-label">Contact Full Name <span class="text-danger">*</span></label>
+                                                <input type="text" class="form-control" id="contactFullName" placeholder="Contact Full Name" value="@(Model.ContactFullName ?? "")" required />
+                                            </div>
+                                            <div class="col-xl-6">
+                                                <label for="phoneNumber" class="form-label">Phone Number <span class="text-danger">*</span></label>
+                                                <input type="text" class="form-control" id="phoneNumber" placeholder="+679 123 4567" value="@(Model.ContactPhoneNumber ?? "")" required />
+                                            </div>
+                                            <div class="col-xl-6">
+                                                <label for="accountNumber" class="form-label">Account Number</label>
+                                                <input type="text" class="form-control" id="accountNumber" placeholder="Account Number" value="@(Model.SelectedBan ?? "")" disabled />
+                                            </div>
+                                            <div class="col-xl-12">
+                                                <label for="email" class="form-label">Email Address <span class="text-danger">*</span></label>
+                                                <input type="email" class="form-control" id="email" placeholder="Email Address" value="@(Model.Email ?? "")" required />
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                                <div class="card-footer">
+                                    <div class="text-end d-flex justify-content-end">
+                                        <button type="button" class="btn btn-primary-light me-2" id="updateProfileBtn">
+                                            <i class="ri-refresh-line me-1"></i> Update
+                                        </button>
+                                        <button type="button" class="btn btn-secondary-light" id="cancelProfileBtn">
+                                            <i class="ri-close-circle-line me-1"></i> Cancel
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Password Settings -->   
+                        <div class="tab-pane text-muted border-0 p-0" id="password-settings" role="tabpanel">
+                            <div class="card custom-card mb-0">
+                                <div class="card-header">
+                                    <div class="card-title d-flex">
+                                        <i class="ri-lock-line me-2"></i> Password Settings
+                                    </div>
+                                </div>
+                                <div class="card-body p-0">
+                                    <div class="row g-0">
+                                        <div class="col-xl-12 p-4 border-end">
+                                            <form id="passwordUpdateForm">
+                                                <!-- Alert messages -->
+                                                <div id="passwordAlert" class="alert d-none" role="alert"></div>
+
+                                                <div class="row gy-3">
+                                                    <div class="col-xl-12">
+                                                        <label for="newPassword" class="form-label">New Password<sup class="text-danger">*</sup></label>
+                                                        <input type="password" class="form-control" id="newPassword" placeholder="New Password" required>
+                                                    </div>
+                                                    <div class="col-xl-12">
+                                                        <label for="confirmPassword" class="form-label">Confirm Password<sup class="text-danger">*</sup></label>
+                                                        <input type="password" class="form-control" id="confirmPassword" placeholder="Confirm Password" required>
+                                                    </div>
+                                                    <p class="fs-12 text-gray-500 text-muted">
+                                                        Password should be min of 
+                                                        <b class="text-success">8 characters <sup>*</sup></b> (and up to 100 characters),
+                                                        <b class="text-success">One Upper Case Character<sup>*</sup></b> and 
+                                                        <b class="text-success">One Special Character<sup>*</sup></b> 
+                                                        e.g., ! &#64; # ? included.
+                                                    </p>
+
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="card-footer">
+                                    <div class="text-end d-flex justify-content-end">
+                                        <button type="button" class="btn btn-primary-light me-2" id="updatePasswordBtn">
+                                            <i class="ri-refresh-line me-1"></i> Update
+                                        </button>
+                                        <button type="button" class="btn btn-secondary-light" id="cancelPasswordBtn">
+                                            <i class="ri-close-circle-line me-1"></i> Cancel
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Include Token Auto-Refresh Script (MUST be loaded FIRST to intercept API calls) -->
+<script>
+    window.mybillConfig = window.mybillConfig || {};
+    window.mybillConfig.jwtExpiryMinutes = @(ViewBag.MyBillJwtExpiryMinutes ?? 14);
+    window.mybillConfig.loginPath = '@Html.Raw(ViewBag.MyBillLoginPath ?? "/my-bill-login")';
+</script>
+<script src="~/scripts/MyBillWidgets/mybill-auth-refresh.js" asp-append-version="true"></script>
+
+<!-- Include Profile Settings Script (loads AFTER auth refresh to benefit from token interception) -->
+<script src="~/scripts/MyBillWidgets/mybill-profile-settings.js" asp-append-version="true"></script>

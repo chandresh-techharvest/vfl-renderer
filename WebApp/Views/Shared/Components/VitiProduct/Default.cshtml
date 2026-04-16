@@ -1,0 +1,48 @@
+﻿@using Progress.Sitefinity.AspNetCore.Mvc.Rendering
+@model IList<VFL.Renderer.ViewModels.VitiProduct.ProductViewModel>
+
+@{
+    var first = Model.FirstOrDefault();
+}
+
+<div class="eshop-product-slider owl-carousel owl-theme">
+
+	@foreach (var item in Model)
+	{
+		<!-- eshop-product-info -->
+		<div class="eshop-product-info wow fadeInUp animated" data-wow-duration="1500ms"
+			 data-wow-delay="00ms">
+			<!-- eshop-product-img -->
+			<div class="eshop-product-img">
+				<img src="/images/default-source/assets/resources/eshop-product-bg.jpg" alt=" ">
+				<!-- eshop-product-img-inner -->
+				<div class="eshop-product-img-inner">
+					<img src="@item.ProductImage" alt="Product Image">
+				</div>
+			</div>
+			<!-- eshop-product-title -->
+			<div class="eshop-product-title">
+				<div class="d-flex">
+					<a href="@item.BuyNowLink" class=""><span>@item.Brand</span></a>
+				</div>
+				<h6>@item.Title</h6>
+				<p>@Html.HtmlSanitize(item.Description)</p>
+				<!-- box-btn -->
+				<div class="theme-btn">
+					<div class="row ">
+						<div class="col-md-6 col-4">
+							<a href="@item.BuyNowLink" class="btn btn-bg-primary">
+								Buy Now
+							</a>
+						</div>
+						<div class="col-md-6 col-4 eshop-price-one">
+							<h3>@item.Price</h3>
+						</div>
+
+					</div>
+				</div>
+			</div>
+		</div>
+	}
+	
+</div>

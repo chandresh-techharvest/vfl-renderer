@@ -1,0 +1,83 @@
+﻿@using Progress.Sitefinity.AspNetCore.Mvc.Rendering
+@model VFL.Renderer.ViewModels.CTA.CTAViewModel
+
+@if (!string.IsNullOrEmpty(Model.MainTitle))
+{
+	<section class="joinus-one">
+		<div class="container">
+			<div class="row">
+				<div class="col-xl-6 col-lg-12 col-md-12 col-sm-12 wow fadeInLeft animated"
+				data-wow-duration="1500ms" data-wow-delay="200ms">
+					<!-- joinus-one-left -->
+					<div class="joinus-one-left">
+						<div class="row">
+							<div class="col-xl-6 col-lg-6 col-md-6 col-sm-6">
+								@if (Model.CTAImage1 != null && Model.CTAImage1.Count() > 0)
+								{
+									<!-- joinus-one-img-1 -->
+									<div class="joinus-one-img-1">
+										<img class="rounded-5" src="@Model.CTAImage1.FirstOrDefault().Url"
+										alt="@Model.CTAImage1.FirstOrDefault().AlternativeText">
+									</div>
+								}
+							</div>
+							<div class="col-xl-6 col-lg-6 col-md-6 col-sm-6">
+								@if (Model.CTAImage2 != null && Model.CTAImage2.Count() > 0)
+								{
+									<!-- joinus-one-img-2 -->
+									<div class="joinus-one-img-2">
+										<img class="rounded-5" src="@Model.CTAImage2.FirstOrDefault().Url"
+										alt="@Model.CTAImage2.FirstOrDefault().AlternativeText">
+									</div>
+								}
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="col-xl-6 col-lg-12 col-md-12 col-sm-12 wow fadeInRight animated"
+				data-wow-duration="1500ms" data-wow-delay="200ms">
+					<!-- joinus-one-right -->
+					<div class="joinus-one-right">
+						<!-- section-title -->
+						<div class="section-title">
+							<i class="@Model.TagTitleIconClass"></i>
+							<span>@Model.TagTitle</span>
+						</div>
+						<!-- section-main-title -->
+						<div class="section-main-title">
+							@Html.HtmlSanitize(Model.MainTitle.ToString())
+							@Html.HtmlSanitize(Model.Summary.ToString())
+						</div>
+						<!-- joinus-one-right-details -->
+						<div class="joinus-one-right-details">
+							@if (Model.PriceIconImage != null && Model.PriceIconImage.Count() > 0)
+							{
+								<!-- joinus-one-icon -->
+								<div class="joinus-one-icon">
+									<img src="@Model.PriceIconImage.FirstOrDefault().Url" alt="@Model.PriceIconImage.FirstOrDefault().AlternativeText">
+								</div>
+							}
+							@if (!string.IsNullOrEmpty(Model.PriceTitle))
+							{
+								@Html.HtmlSanitize(Model.PriceTitle.ToString())								
+							}
+						</div>
+						@if (!string.IsNullOrEmpty(Model.CTAText))
+						{
+							<!-- joinus-one-btn -->
+							<div class="theme-btn">
+								<a href="@Model.CTALink.Href" class="btn btn-bg-primary">
+									@Model.CTAText<i class="icon-1"></i>
+								</a>
+							</div>
+						}
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+}
+else
+{
+    <h3>Please select the content by editing the widget</h3>
+}

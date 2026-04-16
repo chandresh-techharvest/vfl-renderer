@@ -1,0 +1,106 @@
+﻿@using Newtonsoft.Json
+@using Progress.Sitefinity.AspNetCore.Mvc.Rendering
+@using Progress.Sitefinity.RestSdk.Dto;
+@using VFL.Renderer.Dto
+
+@model Progress.Sitefinity.AspNetCore.Widgets.Models.ContentList.ContentListViewModel
+@{
+    var imageCss = Model.GetFieldCss("Image");
+    var titleCss = Model.GetFieldCss("Title");
+    var textCss = Model.GetFieldCss("Text");
+    var wrapperCss = Model.GetFieldCss("Content list");
+}
+
+@{
+    int originalNumber = Model.Items.Count;
+    // Integer division gives the quotient (the whole number part)
+    int col1 = originalNumber / 2;
+
+    // The modulo operator gives the remainder
+    int remainder = originalNumber % 2;
+
+    // If the original number is odd, one of the numbers will be larger by 1
+    int col2 = col1 + remainder;
+
+    int count = 1;
+}
+
+<div class="row @(wrapperCss)" @Html.BuildAttributes(Model.Attributes)>
+
+    <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12">
+        <!-- faq-three-info -->
+        <div class="faq-three-inner">
+            <div class="accordion accordion-flush" id="accordionFlushExample">
+
+                @foreach (var item in Model.Items.Take(col1))
+                {
+                    var title = Model.GetFieldValue<string>(item, "Title");
+                    var text = Model.GetFieldValue<string>(item, "Text");
+
+                    <!-- accordion-item -->
+                    <div class="accordion-item wow fadeInLeft animated" data-wow-duration="1500ms" data-wow-delay="100ms">
+                        <!-- accordion-header -->
+                        <h6 class="accordion-header" id="flush-headingOne">
+                            <button class="accordion-button" type="button" data-bs-toggle="collapse"
+                            data-bs-target="#flush-collapseOne" aria-expanded="true"
+                                    aria-controls="@string.Concat("flush-collapse",@count)">
+                                @title
+                            </button>
+                        </h6>
+                        <!-- accordion-collapse -->
+                        <div id="@string.Concat("flush-collapse",@count)" class="accordion-collapse collapse show"
+                             aria-labelledby="@string.Concat("flush-heading",@count)" data-bs-parent="#accordionFlushExample">
+                            <div class="accordion-body">
+                                <p>
+                                    @text
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+    <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12">
+        <!-- faq-three-info -->
+        <div class="faq-three-inner">
+            <div class="accordion accordion-flush" id="accordionFlushExample">
+
+                @foreach (var item in Model.Items.Skip(col1).Take(col2))
+                {
+                    var title = Model.GetFieldValue<string>(item, "Title");
+                    var text = Model.GetFieldValue<string>(item, "Text");
+
+                    <!-- accordion-item -->
+                    <div class="accordion-item wow fadeInLeft animated" data-wow-duration="1500ms" data-wow-delay="100ms">
+                        <!-- accordion-header -->
+                        <h6 class="accordion-header" id="flush-headingOne">
+                            <button class="accordion-button" type="button" data-bs-toggle="collapse"
+                                    data-bs-target="#flush-collapseOne" aria-expanded="true"
+                                    aria-controls="@string.Concat("flush-collapse",@count)">
+                                @title
+                            </button>
+                        </h6>
+                        <!-- accordion-collapse -->
+                        <div id="@string.Concat("flush-collapse",@count)" class="accordion-collapse collapse show"
+                             aria-labelledby="@string.Concat("flush-heading",@count)" data-bs-parent="#accordionFlushExample">
+                            <div class="accordion-body">
+                                <p>
+                                    @text
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@if (Model.Pager != null)
+{
+    <div class="mt-2">
+        @await Html.PartialAsync("ContentPager", Model.Pager)
+    </div>
+}

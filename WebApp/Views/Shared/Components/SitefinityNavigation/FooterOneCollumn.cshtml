@@ -1,0 +1,55 @@
+﻿@using Progress.Sitefinity.AspNetCore.Mvc.Rendering
+@using Progress.Sitefinity.AspNetCore.Widgets.Models.Navigation;
+
+@model Progress.Sitefinity.AspNetCore.Widgets.Models.Navigation.NavigationViewModel
+<!-- footer-widget-links -->
+<div class="footer-widget footer-widget-links">
+    @foreach (var node in Model.Nodes)
+    {
+        RenderSubLevelsRecursive(node);
+    }    
+</div>
+
+
+@*Here is specified the rendering for the sub levels*@
+@{ void RenderSubLevelsRecursive(PageViewModel node)
+    {
+        <h3 class="footer-widget-title">@node.Title</h3>
+        <li class="nav-item">
+            <a class="nav-link @GetClass(node)" href="@node.Url" target="@node.LinkTarget">@node.Title</a>
+            @if (node.ChildNodes.Count > 0)
+            {
+                <ul class="footer-widget-links-details">
+                    @{
+                        RenderNextLevelsNode(node);
+                    }
+                </ul>
+            }
+        </li>
+    }
+}
+
+
+@{
+    void RenderNextLevelsNode(PageViewModel node)
+    {        
+         @foreach (var childNode in node.ChildNodes)
+                    {
+        <li>
+            <a href="@node.Url" target="@node.LinkTarget">@node.Title</a>
+        </li>
+                    }
+    }
+}
+
+@*Resolves the class that will be added for each node depending whether it is selected*@
+@{ Microsoft.AspNetCore.Html.IHtmlContent GetClass(PageViewModel node)
+    {
+        if (node.IsCurrentlyOpened)
+        {
+            return Html.HtmlSanitize("active");
+        }
+
+        return null;
+    }
+}

@@ -1,0 +1,65 @@
+﻿@using Progress.Sitefinity.AspNetCore.Mvc.Rendering
+@using Progress.Sitefinity.RestSdk.Dto;
+
+@model Progress.Sitefinity.AspNetCore.Widgets.Models.ContentList.ContentListViewModel
+@{
+    var imageCss = Model.GetFieldCss("Image");
+    var titleCss = Model.GetFieldCss("Title");
+    var textCss = Model.GetFieldCss("Text");
+    var wrapperCss = Model.GetFieldCss("Content list");
+    string classAttr = string.IsNullOrEmpty(wrapperCss) ? null : wrapperCss;
+}
+
+
+    @{
+        var first = Model.Items.FirstOrDefault();
+    }
+    @foreach (var item in Model.Items)
+    {
+        DateTime publicationDate = Model.GetFieldValue<DateTime>(item, "Publication date");
+        var image = Model.GetFirstRelatedMedia(item, "Image");
+        var thumbnail = image != null ? image.GetThumbnail() : null;
+        var title = Model.GetFieldValue<string>(item, "Title");
+        var text = Model.GetFieldValue<string>(item, "Text");
+
+        <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 wow fadeInLeft animated"
+             data-wow-duration="1500ms" data-wow-delay="400ms">
+            <!-- blog-one-info -->
+            <div class="blog-one-info">
+                <!-- blog-one-img -->
+                <div class="blog-one-img">
+                    <img class="@(imageCss)" src='@(image.Url)' alt='@(image.AlternativeText)' title='@(image.Title)' />
+                    <!-- blog-one-img-inner -->
+                    <div class="blog-one-img-inner text-center">
+                        <span>@publicationDate.Day</span>
+                        <h6>@publicationDate.ToString("MMM")</h6>
+                    </div>
+                </div>
+                <!-- blog-one-details -->
+                <div class="blog-one-details">
+                    <div class="blog-one-title">
+                        <span>Media Release</span>
+                    </div>
+                    <h4>
+                        @{
+                            var itemUrl = Model.GetItemUrl(this.Context, item);
+                        }
+                        <a href="@itemUrl">@title</a>
+                    </h4>
+                    <p>
+                        @text
+                    </p>
+                    <ul>
+                        <li>
+                            <a class="blog-single-name" href="@itemUrl"></a>
+                        </li>
+                        <li>
+                            <div>
+                                <a href="@itemUrl" class="btn-read-more">Read More</a>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    }

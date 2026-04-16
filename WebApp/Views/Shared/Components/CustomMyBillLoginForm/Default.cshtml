@@ -1,0 +1,143 @@
+﻿@model VFL.Renderer.ViewModels.MyBillLoginForm.MyBillLoginFormViewModel
+@using Progress.Sitefinity.AspNetCore.Mvc.Rendering
+
+@{
+    var lbls = Model.Labels;
+    var usernameInputId = Html.GetUniqueId("sf-ban-");
+    var passwordInputId = Html.GetUniqueId("sf-password-");
+    var rememberMeInputId = Html.GetUniqueId("sf-remember-");
+    var returnUrl = Model.RedirectUrl ?? "/mybill-dashboard";
+}
+
+<style>
+    .mybill-login-form {
+        background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+        border-radius: 15px;
+        padding: 2.5rem;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    }
+    
+    .mybill-login-form .form-control {
+        border-radius: 8px;
+        transition: all 0.3s ease;
+        border: 2px solid #dee2e6;
+    }
+    
+    .mybill-login-form .form-control:focus {
+        border-color: #e60000;
+        box-shadow: 0 0 0 0.2rem rgba(230, 0, 0, 0.15);
+    }
+    
+    .mybill-login-form .vodafone-btn {
+        border-radius: 8px;
+        font-weight: 600;
+        letter-spacing: 0.5px;
+        transition: all 0.3s ease;
+        padding: 0.75rem 1rem;
+    }
+    
+    .mybill-login-form .vodafone-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(230, 0, 0, 0.3);
+    }
+    
+    .mybill-login-form .text-link {
+        color: #e60000;
+        text-decoration: none;
+        font-weight: 600;
+        transition: all 0.3s ease;
+    }
+    
+    .mybill-login-form .text-link:hover {
+        color: #b30000;
+        text-decoration: underline;
+    }
+    
+    .mybill-login-form .form-label {
+        font-weight: 600;
+        color: #2c3e50;
+        font-size: 0.95rem;
+    }
+</style>
+
+<!-- Always load the MyBill login script -->
+<script src="~/scripts/MyBillWidgets/mybill-login.js" asp-append-version="true" section-name="Bottom" assembly-ref="Progress.Sitefinity.AspNetCore.Widgets"></script>
+
+<div data-sf-role="sf-login-form-container"
+     data-sf-visibility-hidden="@Model.VisibilityClasses[Progress.Sitefinity.AspNetCore.Configuration.VisibilityStyle.Hidden]"
+     data-sf-invalid="@Model.InvalidClass"
+     class="@(string.IsNullOrEmpty(Model.CssClass) ? null : Model.CssClass)"
+     @Html.BuildAttributes(Model.Attributes)>
+    <div data-sf-role="form-container" class="authentication-cover">
+        <div class="aunthentication-cover-content mybill-login-form">
+            <p class="h3 fw-bold mb-4 text-center" style="color: #e60000;">
+                @lbls.Header
+            </p>
+            <div id="errorContainer" class="my-3 @(string.IsNullOrEmpty(Model.ErrorMessage) ? "d-none" : "d-block")" role="alert" aria-live="assertive" data-sf-role="error-container">
+                <div id="errorMessage" class="alert alert-danger my-3" data-sf-role="error-message-container">
+                    @(string.IsNullOrEmpty(lbls.ErrorMessage) ? "Login failed. Please try again." : lbls.ErrorMessage)
+                </div>
+            </div>
+
+            <div id="successContainer" class="alert alert-success d-none" role="alert" aria-live="assertive" data-sf-role="success-message-container">
+            </div>
+
+            <form action="@Model.LoginHandlerPath" class="row gy-3" method="post" role="form" novalidate>
+                <div class="col-xl-12">
+                    <label for="@usernameInputId" class="form-label mb-2">@lbls.BanLabel</label>
+                    <input type="text" class="form-control form-control-lg" id="@usernameInputId" name="username" placeholder="Enter your BAN" data-sf-role='required'>
+                    <small class="form-text text-muted">Enter your Business Account Number</small>
+                </div>
+                <div class="col-xl-12 mt-3">
+                    <label for="@passwordInputId" class="form-label d-block mb-2">
+                        @lbls.PasswordLabel
+                        @if (!string.IsNullOrEmpty(Model.ForgottenPasswordLink))
+                        {
+                            <a href="@Model.ForgottenPasswordLink" class="float-end text-link">@lbls.ForgottenPasswordLinkLabel</a>
+                        }
+                    </label>
+                    <div class="input-group">
+                        <input type="password" class="form-control form-control-lg" id="@passwordInputId" name="password" placeholder="Enter your password" data-sf-role='required'>
+                    </div>
+                </div>
+
+                @if (Model.RememberMe)
+                {
+                    <div class="row mb-3">
+                        <div class="checkbox col-md-6 m-0">
+                            <label>
+                                <input type="checkbox" id="@rememberMeInputId" name="rememberMe" value="true" />
+                                <label for="@rememberMeInputId">@lbls.RememberMeLabel</label>
+                            </label>
+                        </div>
+                    </div>
+                }
+
+                <input type="hidden" name="RedirectUrl" value="@returnUrl" />
+                <input type="hidden" value="" name="sf_antiforgery" />
+                <div class="col-xl-12 d-grid mt-4">
+                    <button class="btn btn-lg vodafone-btn shadow-sm" type="submit" id="loginSubmitBtn">
+                        @lbls.SubmitButtonLabel
+                    </button>
+                </div>
+                
+                <!-- Loading spinner (hidden by default) -->
+                <div id="loader" class="text-center d-none">
+                    <div class="spinner-border text-danger" role="status">
+                        <span class="visually-hidden">Loading...</span>
+                    </div>
+                </div>
+
+            </form>
+
+            <input type="hidden" name="ValidationInvalidBanMessage" value="@lbls.ValidationInvalidBanMessage" />
+            <input type="hidden" name="ValidationRequiredMessage" value="@lbls.ValidationRequiredMessage" />
+            
+            <!-- Resend verification container (hidden by default) -->
+            <div id="resendContainer" class="d-none mt-3 text-center" data-sf-role="resend-container">
+                <button type="button" id="resendVerification" class="btn btn-link">Resend verification email</button>
+            </div>
+        </div>
+    </div>
+</div>
+

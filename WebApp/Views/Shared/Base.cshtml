@@ -1,0 +1,284 @@
+﻿@model Progress.Sitefinity.AspNetCore.Models.PageModel
+@using Progress.Sitefinity.AspNetCore.Mvc.Rendering
+
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@addTagHelper *, Progress.Sitefinity.AspNetCore
+
+@inject Progress.Sitefinity.AspNetCore.Web.IRequestContext requestContext;
+
+<!DOCTYPE html>
+
+<html id="html" lang="@requestContext.Culture">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
+
+    @Html.RenderSeoMeta(this.Model)
+
+    <environment include="Development">
+        <link rel="stylesheet" href="@Progress.Sitefinity.AspNetCore.Constants.PrefixRendererUrl("styles/bootstrap.css")" />
+    </environment>
+    <environment exclude="Development">
+        <link rel="stylesheet" href="@Progress.Sitefinity.AspNetCore.Constants.PrefixRendererUrl("styles/bootstrap.min.css")" />
+    </environment>
+
+    @* Scripts for the OOB Sitefinity widgets *@
+    <link rel="stylesheet" href="@Progress.Sitefinity.AspNetCore.Constants.PrefixRendererUrl("styles/main.css")" type="text/css" />
+
+    @* Custom styles *@
+    <!-- fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@200;300;400;500;600;700;800&display=swap"
+          rel="stylesheet">
+    
+    <!-- stylesheet -->
+    <link rel="stylesheet" href="~/styles/styles.css" />
+    <!-- ---------------------------------------------------------------------------- -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+	<link rel="stylesheet" href="/vendors/bootstrap/css/bootstrap.css" type="text/css" asp-append-version="true" />
+	<link rel="stylesheet" href="/vendors/fontawesome/css/all.min.css" type="text/css" asp-append-version="true" />
+	<link rel="stylesheet" href="/vendors/animate/animate.min.css" type="text/css" asp-append-version="true" />
+	<link rel="stylesheet" href="/vendors/owl-carousel/owl.carousel.min.css" type="text/css" asp-append-version="true" />
+	<link rel="stylesheet" href="/vendors/owl-carousel/owl.theme.default.min.css" type="text/css" asp-append-version="true" />
+	<link rel="stylesheet" href="/vendors/twoet-icons/flaticon_twoet.css" type="text/css" asp-append-version="true" />
+	<link rel="stylesheet" href="/vendors/icomoon/style.css" type="text/css" asp-append-version="true" />
+	<link rel="stylesheet" href="/vendors/swiper/swiper-bundle.min.css" type="text/css" asp-append-version="true" />
+	<link rel="stylesheet" href="/vendors/bootstrap-select-main/bootstrap-select.min.css" type="text/css" asp-append-version="true" />
+	<link rel="stylesheet" href="/vendors/youtube-popup/youtube-popup.css" type="text/css" asp-append-version="true" />
+	<link rel="stylesheet" href="/styles/style.css" type="text/css" asp-append-version="true" />
+	<link rel="stylesheet" href="/styles/responsive.css" type="text/css" asp-append-version="true" />
+	<link href="~/vendors/dist/sweetalert2.min.css" rel="stylesheet" />
+	<script src="/vendors/jquery/jquery-3.6.0.min.js" asp-append-version="true"></script>
+	@* Custom scripts *@
+	<script src="~/scripts/scripts.js" asp-append-version="true"></script>
+</head>
+<!-- custom-cursor -->
+<body class="custom-cursor">
+    <div class="custom-cursor-one"></div>
+    <div class="custom-cursor-two"></div>
+    <!-- preloader -->
+    <div class="preloader">
+        <div class="preloader-circle"></div>
+        <div class="preloader-circle-2"></div>
+    </div>	
+	<!-- page-wrapper -->
+	<div class="page-wrapper">
+		<!-- main-header -->
+		<header class="main-header">
+			<!-- header-top -->
+			<div class="header-four-top">	
+				<div class="header-four-top-left" data-sfcontainer="TopHeaderLeft">
+
+				</div>
+				<div class="header-four-top-right" data-sfcontainer="TopHeaderRight">
+
+				</div>
+			</div>
+			<!-- header-menu -->
+			<div class="header-menu">
+				<!-- header-logo -->
+				<div class="logo-box" data-sfcontainer="MainSiteLogo">
+					
+				</div>
+				<div data-sfcontainer="MainNavigation" >
+
+				</div>
+				
+
+				<!-- Overlay -->
+				<div class="mega-overlay"></div>
+				<!-- <div class="menu-search-box">
+					<a href="#" class="search-toggler">
+						<i class="icon-search"></i>
+					</a>
+				</div> -->
+				<!-- header-right -->
+				<div class="header-right align-items-center">
+					<!-- <div class="menu-call">
+						<div class="menu-search-box">
+							<a href="#" class="search-toggler">
+								<i class="icon-search"></i>
+							</a>
+						</div>
+
+					</div> -->
+					<!-- <div class="menu-btn">
+						<a href="contact.html" class="btn btn-small-primary">Contact Us<i class="icon-1"></i></a>
+					</div> -->
+					<!-- <div class="side-drawer-toggler-btn">
+						<span class="line-1"></span>
+						<span class="line-2"></span>
+					</div> -->
+					<div class="menu-search-box">	
+						<a href="#" class="search-toggler">
+							<i class="icon-search"></i>
+						</a>
+					</div>
+					<div class="header-right-end">
+						<span class="line-1"></span>
+						<span class="line-2"></span>
+						<span class="line-3"></span>
+					</div>
+
+				</div>
+			</div>
+		</header>
+		<!-- site-main -->
+		<main class="site-main" >
+			<div data-sfcontainer="mainContent">
+				</div>
+
+		</main>
+		<footer>
+			<!-- footer-main -->
+			<div class="footer-main" >
+				<!-- footer-main-shape-1 -->
+				<div class="footer-main-shape-1"></div>
+				<!-- footer-main-shape-2 -->
+				<div class="footer-main-shape-2"></div>
+				<div class="container" data-sfcontainer="footermain">
+
+				</div>
+			</div>
+			<!-- footer-bottom -->
+			<div class="footer-bottom" data-sfcontainer="footerbottom">
+				
+			</div>
+		</footer>
+		<!-- mobile-nav-wrapper -->
+		<div class="mobile-nav-wrapper">
+			<!-- mobile-nav-overlay -->
+			<div class="mobile-nav-overlay mobile-nav-toggler"></div>
+			<!-- mobile-nav-content -->
+			<div class="mobile-nav-content" data-sfcontainer="MobileNav">
+				
+				
+				
+			</div>
+		</div>
+		<!-- side-drawer-wrapper -->
+		<div class="side-drawer-wrapper">
+			<!-- side-drawer-overlay -->
+			<div class="side-drawer-overlay side-drawer-toggler"></div>
+			<!-- side-drawer-content -->
+			<div class="side-drawer-content">
+				<a href="#" class="side-drawer-close side-drawer-toggler">
+					<i class="fa fa-times"></i>
+				</a>
+				<!-- logo-box -->
+				<div class="logo-box">
+					<a href="index.html" aria-label="logo image">
+						<img src="/images/resources/logo-two.png"
+							 alt="Insuco">
+					</a>
+				</div>
+				<!-- side-drawer-widget -->
+				<div class="side-drawer-widget">
+					<h3 class="side-drawer-widget-title">About</h3>
+					<p class="side-drawer-widget-text">
+						We denounce with righteous indignation and dislike men who
+						beguiled and demoralized by the charms of pleasure of the moment, so blinded by desire, that
+						they cannot foresee the pain and trouble that are bound to ensue and equal blame belongs to
+						those fail in their duty
+					</p>
+				</div>
+				<!-- mobile-nav-top -->
+				<div class="mobile-nav-top">
+					<!-- mobile-nav-social -->
+					<ul class="mobile-nav-social">
+						<li><a href="#"><i class="fab fa-facebook-f"></i></a></li>
+						<li><a href="#"><i class="fab fa-twitter"></i></a></li>
+						<li><a href="#"><i class="fab fa-linkedin-in"></i></a></li>
+						<li><a href="#"><i class="fab fa-instagram"></i></a></li>
+					</ul>
+				</div>
+				<!-- side-drawer-gallery -->
+				<div class="side-drawer-gallery">
+					<!-- side-drawer-gallery-title -->
+					<h3 class="side-drawer-gallery-title">Gallery</h3>
+					<ul class="list-unstyled side-drawer-gallery-details">
+						<li>
+							<a href="/images/resources/popular-movie-four-img-1.jpg" class="img-popup">
+								<img src="/images/resources/popular-movie-four-img-1.jpg"
+									 alt="popular-movie-four-img-1">
+							</a>
+						</li>
+						<li>
+							<a href="/images/resources/popular-movie-six-img-4.jpg" class="img-popup">
+								<img src="/images/resources/popular-movie-six-img-4.jpg"
+									 alt="popular-movie-six-img-4">
+							</a>
+						</li>
+						<li>
+							<a href="/images/resources/popular-movie-six-img-3.jpg" class="img-popup">
+								<img src="/images/resources/popular-movie-six-img-3.jpg"
+									 alt="popular-movie-six-img-3">
+							</a>
+						</li>
+						<li>
+							<a href="/images/resources/popular-movie-six-img-1.jpg" class="img-popup">
+								<img src="/images/resources/popular-movie-six-img-1.jpg"
+									 alt="popular-movie-six-img-1">
+							</a>
+						</li>
+						<li>
+							<a href="/images/resources/popular-movie-four-img-2.jpg" class="img-popup">
+								<img src="/images/resources/popular-movie-four-img-2.jpg"
+									 alt="popular-movie-four-img-2">
+							</a>
+						</li>
+						<li>
+							<a href="/images/resources/popular-movie-four-img-3.jpg" class="img-popup">
+								<img src="/images/resources/popular-movie-four-img-3.jpg"
+									 alt="popular-movie-four-img-3">
+							</a>
+						</li>
+					</ul>
+				</div>
+				<!-- mobile-nav-contact -->
+				<ul class="mobile-nav-contact list-unstyled">
+					<li>
+						<!-- mobile-menu-call -->
+						<div class="mobile-menu-call">
+							<i class="icon-uniE90D"></i>
+							<a href="#">+222 (345) 88 99</a>
+						</div>
+					</li>
+					<li>
+						<!-- mobile-menu-btn -->
+						<div class="theme-btn">
+							<a href="about.html" class="btn btn-bg-primary">Learn More Us<i class="icon-1"></i></a>
+						</div>
+					</li>
+				</ul>
+			</div>
+		</div>
+		<!-- search-popup -->
+		<div class="search-popup">
+			<!-- search-popup-overlay -->
+			<div class="search-popup-overlay search-toggler"></div>
+			<!-- search-popup-content -->
+			<div class="search-popup-content" data-sfcontainer="SearchBox">
+			</div>
+		</div>
+	</div>
+    @RenderSection("Scripts")
+	
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+	
+
+	<!-- script -->
+	
+	<script src="~/vendors/dist/sweetalert2.min.js"></script>
+	<script src="/vendors/bootstrap/js/bootstrap.bundle.min.js" asp-append-version="true"></script>
+	<script src="/vendors/fontawesome/attribution.js" asp-append-version="true"></script>
+	<script src="/vendors/owl-carousel/owl.carousel.min.js" asp-append-version="true"></script>
+	<script src="/vendors/swiper/swiper-bundle.min.js" asp-append-version="true"></script>
+	<script src="/vendors/wow/wow.js" asp-append-version="true"></script>
+	<script src="/vendors/bootstrap-select-main/bootstrap-select.min.js" asp-append-version="true"></script>
+	<script src="/vendors/youtube-popup/youtube-popup.jquery.js" asp-append-version="true"></script>
+	<script src="/scripts/script.js" asp-append-version="true"></script>
+</body>
+</html>

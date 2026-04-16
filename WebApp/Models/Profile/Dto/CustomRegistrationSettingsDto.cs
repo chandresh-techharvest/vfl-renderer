@@ -1,0 +1,34 @@
+﻿namespace VFL.Renderer.Models.Profile.Dto
+{
+    public class CustomRegistrationSettingsDto
+    {
+        /// <summary>
+        /// Gets or sets a value indicating whether the membership provider settings require question and answer for reset/retrieval password functionality.
+        /// </summary>
+        /// <value>
+        /// <c>true</c> if the membership provider requires question and answer; otherwise, <c>false</c>.
+        /// </value>
+        public bool RequiresQuestionAndAnswer { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating if the user account is activated immediately after registration or after confirmation.
+        /// </summary>
+        public string ActivationMethod { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether the SMTP settings are configured properly.
+        /// </summary>
+        /// <value>
+        /// <c>true</c> if the SMTP settings are configured properly; otherwise, <c>false</c>.
+        /// </value>
+        public bool SmtpConfigured { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether the registration is enabled.
+        /// </summary>
+        /// <value>
+        /// <c>true</c> if the registration is enabled; otherwise, <c>false</c>.
+        /// </value>
+        public bool RegistrationEnabled { get; set; }
+    }
+}

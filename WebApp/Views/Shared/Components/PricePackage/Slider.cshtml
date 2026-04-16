@@ -1,0 +1,41 @@
+﻿@using Progress.Sitefinity.AspNetCore.Mvc.Rendering
+@model IList<VFL.Renderer.ViewModels.PricePackage.PricePackageViewModel>
+
+@{
+	var first = Model.FirstOrDefault();
+}
+
+<div class="owl-carousel owl-theme pricing-package-slider">
+
+	@foreach (var item in Model)
+	{
+		<div class="wow fadeInRight animated"
+			 data-wow-duration="1500ms" data-wow-delay="000ms">
+			<!-- pricing-package-one-box -->
+			<div class="pricing-package-one-box">
+				<!-- box-title -->
+				<div class="box-title text-center">
+					<span>@item.Category</span>
+					<h4>@item.Title</h4>
+				</div>
+				<!-- box-icon -->
+				<div class="box-icon text-center">
+					<i class="@item.IconClass"></i>
+				</div>
+				<!-- box-item-list -->
+				@Html.HtmlSanitize(item.Features)
+				<!-- box-price -->
+				<div class="box-price">
+					<h3>$@item.Price<span>/per month</span></h3>
+				</div>
+				<!-- box-btn -->
+				<div class="box-btn">
+					<a href="@item.PackageLink" class="btn btn-small-primary btn-bg-white">
+						Choose Package<i class="icon-1"></i>
+					</a>
+				</div>
+			</div>
+		</div>
+	}
+
+</div>

@@ -1,0 +1,65 @@
+@model VFL.Renderer.ViewModels.MyBillCheckout.MyBillCheckoutViewModel
+
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card custom-card shadow-sm">
+                <div class="card-body">
+                    <div class="text-center p-md-5">
+                        <div class="d-flex align-items-center justify-content-center mb-4">
+                            <svg width="90px" height="90px" viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" fill="#000000" stroke="#000000" stroke-width="3.072">
+                                <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                                <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
+                                <g id="SVGRepo_iconCarrier">
+                                    <path fill="#39a300" d="M512 64a448 448 0 110 896 448 448 0 010-896zm-55.808 536.384l-99.52-99.584a38.4 38.4 0 10-54.336 54.336l126.72 126.72a38.272 38.272 0 0054.336 0l262.4-262.464a38.4 38.4 0 10-54.272-54.336L456.192 600.384z"></path>
+                                </g>
+                            </svg>
+                        </div>
+
+                        <h2 class="text-success mb-3">Bill Payment Successful</h2>
+                        <p class="text-muted mb-4">Dear Customer, thank you for your payment on Vodafone MyBill.</p>
+
+                        <div class="table-responsive">
+                            <table class="table table-bordered">
+                                <tbody>
+                                    <tr>
+                                        <td class="fw-bold" style="width: 40%;">Date</td>
+                                        <td id="resultDate">-</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="fw-bold">Order Number</td>
+                                        <td id="resultOrderRef">-</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="fw-bold">Customer</td>
+                                        <td id="resultEmail">-</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="fw-bold">Invoice Number</td>
+                                        <td id="resultInvoice">-</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="fw-bold">Amount</td>
+                                        <td id="resultAmount">-</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <p class="mt-4 text-muted">
+                            You will receive an Email and SMS pertaining to your transaction details.<br>
+                            Thank you for using our service.
+                        </p>
+
+                        <div class="mt-4 d-flex justify-content-center flex-wrap gap-2">
+                            <a href="@Model.CustomerSupportUrl" class="btn btn-outline-primary">Customer Support</a>
+                            <a href="@Model.DashboardUrl" class="btn btn-primary">Back to Dashboard</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="~/scripts/MyBillWidgets/mybill-checkout-success.js" asp-append-version="true"></script>

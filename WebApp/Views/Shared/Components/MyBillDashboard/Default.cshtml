@@ -1,0 +1,352 @@
+@using Progress.Sitefinity.AspNetCore.Mvc.Rendering
+@model VFL.Renderer.ViewModels.MyBillDashboard.MyBillDashboardViewModel
+
+
+
+
+@{
+    // Check if we have preview data (for Sitefinity designer mode)
+    bool hasPreviewData = Model.BanAccounts != null && Model.BanAccounts.Length > 0;
+    bool isDesignerMode = Model.IsDesignerMode;
+    bool isAuthenticated = Model.IsAuthenticated;
+    
+    // Show dashboard if: authenticated OR in designer mode with preview data
+    bool showDashboard = (isAuthenticated && hasPreviewData) || (isDesignerMode && hasPreviewData);
+}
+
+@if (isDesignerMode)
+{
+    <!-- PREVIEW MODE for Sitefinity Designer -->
+    <div class="alert alert-info mb-3">
+        <i class="ri-information-line me-2"></i>
+        <strong>Preview Mode:</strong> This is how the dashboard will look for authenticated MyBill users.
+    </div>
+}
+
+<!-- Empty state (no BAN accounts) -->
+<div id="noBanAccounts" class="@(showDashboard ? "d-none" : "")" style="@(showDashboard ? "display:none;" : "display:block;")">
+    <div class="card border-0 shadow-sm text-center p-5">
+        <div class="mb-4">
+            <i class="ri-building-line fs-1 text-primary" style="font-size: 4rem !important;"></i>
+        </div>
+        <h4 class="fw-semibold mb-3" id="noBanTitle">No Billing Accounts Found</h4>
+        <p class="text-muted mb-4" id="noBanMessage">
+            Your MyBill profile does not have any billing accounts (BANs) linked yet.
+            <br />
+            Please contact our support team to link your billing accounts to your profile.
+        </p>
+        <div class="d-flex justify-content-center gap-3">
+            <a href="/contact-us" class="btn btn-primary">
+                <i class="ri-customer-service-2-line me-2"></i> Contact Support
+            </a>
+            <a href="/" class="btn btn-outline-secondary">
+                <i class="ri-home-line me-2"></i> Go to Home
+            </a>
+        </div>
+        <div class="mt-4 pt-3 border-top">
+            <p class="text-muted small mb-0" id="noBanUserInfo">
+                <!-- User info will be populated by JavaScript if available -->
+            </p>
+        </div>
+    </div>
+</div>
+
+<!-- Main Dashboard (when BAN accounts exist) -->
+<div id="dashboardMain" class="@(showDashboard ? "" : "d-none")" style="@(showDashboard ? "display:block;" : "display:none;")">
+    <div class="row">
+        <!-- Welcome Card with BAN Selector -->
+        <div class="col-xxl-8">
+            <div class="row">
+                <div class="col-xxl-4 col-xl-6 col-md-12">
+                    <div class="card custom-card shadow-none projects-tracking-card text-center">
+                        <div class="card-body">
+                            <div>
+                                <h5 class="mb-5 mt-3 fw-semibold">Welcome Back!</h5>
+                                <h6 class="mb-5 fw-normal" style="line-height:45px; font-size:30px;" id="companyName">
+                                    @if (hasPreviewData && isDesignerMode && Model.BanAccounts.Length > 0)
+                                    {
+                                        var selectedAccount = Model.BanAccounts.FirstOrDefault(b => b.IsSelected) ?? Model.BanAccounts[0];
+                                        var accountName = selectedAccount?.Name ?? "Account";
+                                        @accountName
+                                    }
+                                    else
+                                    {
+                                        <text>Account</text>
+                                    }
+                                </h6>
+                                <label for="select-ban" class="fs-13 d-block mt-5 mb-3 text-muted">BAN Account Number</label>
+                                <div class="mt-2">
+                                    <select class="ti-form-select text-default mb-4 fs-25 fw-light" 
+                                            id="select-ban" 
+                                            autocomplete="off" 
+                                            aria-label="Select BAN account number"
+                                            style="background-color:transparent;">
+                                        @if (hasPreviewData && isDesignerMode)
+                                        {
+                                            <option value="" disabled>Select an account</option>
+                                            foreach (var ban in Model.BanAccounts)
+                                            {
+                                                <option value="@ban.Number" selected="@ban.IsSelected">@ban.Number</option>
+                                            }
+                                        }
+                                        else
+                                        {
+                                            <option value="" disabled selected>Loading accounts...</option>
+                                        }
+                                    </select>
+                                </div>
+                            </div>
+                            <span class="shape-1 text-primary"><i class="ti ti-circle fs-20 fw-bold"></i></span>
+                            <span class="shape-2 text-secondary"><i class="ti ti-triangle fs-20 fw-bold"></i></span>
+                            <span class="shape-3 text-warning"><i class="ti ti-square fs-20 fw-bold"></i></span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Graph Card - Details of the Bill -->
+                <div class="col-xxl-8 col-xl-6 col-md-12">
+                    <div class="card custom-card">
+                        <div class="card-header justify-content-between">
+                            <div class="card-title">Details of the Bill</div>
+                        </div>
+                        <div class="card-body">
+                            <div id="audienceReport"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Transaction History Section -->
+                <div class="col-xxl-12 col-xl-12">
+                    <div class="card custom-card">
+                        <div class="card-header justify-content-between">
+                            <div class="card-title">Billing History</div>
+                            <div class="d-flex gap-2">
+                                <div class="me-3">
+                                    <input class="form-control form-control-sm" type="text" id="searchTransactions" placeholder="Search Here" aria-label="Search transactions" />
+                                </div>
+                                <div class="dropdown">
+                                    <a href="javascript:void(0);" class="btn btn-primary btn-sm btn-wave waves-effect waves-light" 
+                                       data-bs-toggle="dropdown" aria-expanded="false">
+                                        Sort By<i class="ri-arrow-down-s-line align-middle ms-1 d-inline-block"></i>
+                                    </a>
+                                    <ul class="dropdown-menu">
+                                        <li><a class="dropdown-item" href="javascript:void(0);">Paid</a></li>
+                                        <li><a class="dropdown-item" href="javascript:void(0);">Pending</a></li>
+                                        <li><a class="dropdown-item" href="javascript:void(0);">All</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-body p-0">
+                            <div class="table-responsive">
+                                <table class="table text-nowrap">
+                                    <thead>
+                                        <tr>
+                                            <th>Invoice Number</th>
+                                            <th>Description</th>
+                                            <th>Amount</th>
+                                            <th>Due Date</th>
+                                            <th>Payment Status</th>
+                                            <th>Invoices</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="transactionTableBody">
+                                        @if (hasPreviewData && isDesignerMode)
+                                        {
+                                            <tr>
+                                                <td>INV-1122439673</td>
+                                                <td>Monthly Service Charges</td>
+                                                <td>$799.26</td>
+                                                <td>1 Oct 2025</td>
+                                                <td><span class="badge bg-warning">Pending</span></td>
+                                                <td>
+                                                    <button class="btn btn-sm btn-primary-light" aria-label="Download invoice INV-1122439673">
+                                                        <i class="ri-download-2-line" aria-hidden="true"></i> Download
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>INV-1122439600</td>
+                                                <td>Monthly Service Charges</td>
+                                                <td>$750.00</td>
+                                                <td>1 Sep 2025</td>
+                                                <td><span class="badge bg-success">Paid</span></td>
+                                                <td>
+                                                    <button class="btn btn-sm btn-primary-light" aria-label="Download invoice INV-1122439600">
+                                                        <i class="ri-download-2-line" aria-hidden="true"></i> Download
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                        }
+                                        else
+                                        {
+                                            <tr>
+                                                <td colspan="6" class="text-center">Loading transactions...</td>
+                                            </tr>
+                                        }
+                                    </tbody>
+                                </table>
+                            </div>
+                            <!-- Pagination Controls -->
+                            <div class="card-footer d-flex justify-content-between align-items-center">
+                                <div class="text-muted" id="paginationInfo">
+                                    Showing <span id="pageStart">0</span> to <span id="pageEnd">0</span> of <span id="totalRecords">0</span> entries
+                                </div>
+                                <nav aria-label="Transaction pagination">
+                                    <ul class="pagination pagination-sm mb-0" id="paginationControls">
+                                        <li class="page-item disabled" id="prevPage">
+                                            <a class="page-link" href="javascript:void(0);">Previous</a>
+                                        </li>
+                                        <li class="page-item disabled" id="nextPage">
+                                            <a class="page-link" href="javascript:void(0);">Next</a>
+                                        </li>
+                                    </ul>
+                                </nav>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right Column - Current Invoice, Total Pending, and Manage Bills -->
+        <div class="col-xxl-4">
+            <!-- Current Invoice Card -->
+            <div class="card custom-card accunt-details-card">
+                <div class="card-body text-fixed-white">
+                    <div class="d-flex align-items-center justify-content-between mb-3">
+                        <div class="">
+                            <div class="fw-medium fs-18 text-fixed-white mb-0">Current Invoice</div>
+                            <div class="">
+                                <div class="d-flex flex-column">
+                                    <span class="text-fixed-white op-8 mb-1" id="currentInvoiceNumber">Invoice: @(hasPreviewData && isDesignerMode ? "INV-1122439673" : "---")</span>
+                                    <span class="text-fixed-white op-8 mb-1" id="currentInvoiceDueDate">Due: @(hasPreviewData && isDesignerMode ? "23 Oct 2025" : "---")</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="currentInvoiceStatus">
+                            @if (hasPreviewData && isDesignerMode)
+                            {
+                                <span class="badge bg-warning text-dark">Pending</span>
+                            }
+                        </div>
+                    </div>
+                    <h3 class="text-fixed-white fw-semibold mb-0" id="currentInvoiceAmount">Amount: @(hasPreviewData && isDesignerMode ? "$799.26" : "$0.00")</h3>
+                    <span class="fs-14 op-7 text-fixed-white" id="currentInvoiceHint">Latest bill amount</span>
+                </div>
+            </div>
+
+            <!-- Total Pending Amount Card (Different color - using gradient) -->
+            <div class="card custom-card" style="background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);">
+                <div class="card-body text-fixed-white">
+                    <div class="d-flex align-items-center justify-content-between mb-3">
+                        <div class="">
+                            <div class="fw-medium fs-18 text-fixed-white mb-0">Total Outstanding</div>
+                            <div class="">
+                                <div class="d-flex flex-column">
+                                    <span class="text-fixed-white op-8 mb-1" id="pendingInvoiceCount">Pending Invoices: @(hasPreviewData && isDesignerMode ? "1" : "0")</span>
+                                    <span class="text-fixed-white op-8 mb-1" id="latestDueDate">Earliest Due: @(hasPreviewData && isDesignerMode ? "23 Oct 2025" : "---")</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div>
+                            <i class="ri-money-dollar-circle-line fs-1 op-5"></i>
+                        </div>
+                    </div>
+                    <h3 class="text-fixed-white fw-semibold mb-0" id="totalPendingAmount">Total: @(hasPreviewData && isDesignerMode ? "$799.26" : "$0.00")</h3>
+                    <span class="fs-14 op-7 text-fixed-white" id="payNowHint">Click "Pay Now" in the table to pay</span>
+                </div>
+            </div>
+
+            <!-- Manage Bills Card -->
+            <div class="card custom-card">
+                <div class="card-header justify-content-between">
+                    <div class="card-title">Manage Bills</div>
+                </div>
+                <div class="card-body">
+                    <div id="paperlessEmailsContainer">
+                        @if (hasPreviewData && isDesignerMode)
+                        {
+                            @* Show preview of editable form in designer mode *@
+                            <form id="paperlessEmailForm" novalidate>
+                                @for (int i = 0; i < 3; i++)
+                                {
+                                    var email = "";
+                                    var emailId = 0;
+                                    
+                                    var selectedAccount = Model.BanAccounts.FirstOrDefault(b => b.IsSelected) ?? Model.BanAccounts.FirstOrDefault();
+                                    if (selectedAccount?.PaperlessEmails != null && i < selectedAccount.PaperlessEmails.Length)
+                                    {
+                                        email = selectedAccount.PaperlessEmails[i].Email;
+                                        emailId = selectedAccount.PaperlessEmails[i].Id;
+                                    }
+                                    
+                                    <div class="mb-3">
+                                        <label for="paperlessEmail@(i)" class="form-label">Paperless Email @(i + 1)</label>
+                                        <div class="input-group">
+                                            <div class="input-group-text"><i class="ri-mail-line"></i></div>
+                                            <input 
+                                                type="email" 
+                                                class="form-control paperless-email-input" 
+                                                id="paperlessEmail@(i)" 
+                                                data-email-id="@emailId" 
+                                                data-index="@i" 
+                                                value="@email" 
+                                                placeholder="Enter email address" 
+                                                aria-label="Paperless email address @(i + 1)" 
+                                            />
+                                            <div class="invalid-feedback" id="emailError@(i)">Please enter a valid email address.</div>
+                                        </div>
+                                    </div>
+                                }
+                                <div class="d-grid mt-3">
+                                    <button type="button" class="btn btn-primary" disabled>
+                                        <i class="ri-save-line me-1"></i> Update Paperless Emails
+                                    </button>
+                                </div>
+                            </form>
+                        }
+                        else
+                        {
+                            <div class="text-muted text-center py-3">
+                                <div class="spinner-border spinner-border-sm" role="status">
+                                    <span class="visually-hidden">Loading...</span>
+                                </div>
+                                <p class="mb-0 mt-2">Loading paperless emails...</p>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Loading spinner (hidden in designer mode, shown during JS loading when authenticated) -->
+<div id="loader" class="@(isDesignerMode ? "d-none" : "") text-center py-5" style="@(isDesignerMode ? "display:none;" : "")">
+    <div class="spinner-border text-primary" role="status">
+        <span class="visually-hidden">Loading...</span>
+    </div>
+</div>
+
+<!-- Include ApexCharts library -->
+<script src="~/libs/apexcharts/apexcharts.min.js"></script>
+
+<!-- Include Token Auto-Refresh Script (MUST be loaded FIRST) -->
+<script>
+    window.mybillConfig = window.mybillConfig || {};
+    window.mybillConfig.jwtExpiryMinutes = @(ViewBag.MyBillJwtExpiryMinutes ?? 14);
+    window.mybillConfig.loginPath = '@Html.Raw(ViewBag.MyBillLoginPath ?? "/my-bill-login")';
+</script>
+<script src="~/scripts/MyBillWidgets/mybill-auth-refresh.js" asp-append-version="true"></script>
+
+<!-- Pass checkout page URL to payment script -->
+<script>
+    window.mybillCheckoutPageUrl = '@(Model.CheckoutPageUrl ?? "/mybill/checkout")';
+</script>
+
+<!-- Include Payment Initiation Script -->
+<script src="~/scripts/MyBillWidgets/mybill-payment.js" asp-append-version="true"></script>
+
+<!-- Include JavaScript -->
+<script src="~/scripts/MyBillWidgets/mybill-dashboard.js" asp-append-version="true"></script>

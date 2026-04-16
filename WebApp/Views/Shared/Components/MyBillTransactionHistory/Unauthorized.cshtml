@@ -1,0 +1,5 @@
+@model VFL.Renderer.ViewModels.MyBillTransactionHistory.MyBillTransactionHistoryViewModel
+@if (!string.IsNullOrEmpty(Model.RedirectUrl))
+{
+    <script type="text/javascript">window.location.replace('@Html.Raw(Model.RedirectUrl)');</script>
+}

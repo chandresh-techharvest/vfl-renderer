@@ -1,0 +1,60 @@
+﻿@model VFL.Renderer.Models.Registration.RegistrationViewModel
+@using VFL.Renderer.Models.Registration
+@using Progress.Sitefinity.AspNetCore.Mvc.Rendering
+@using VFL.Renderer.Services.Registration.Models
+
+@{
+
+    var response = ViewBag.Response as RegistrationResponse;
+}
+@{
+    var lbls = Model.Labels;
+}
+
+<script src="scripts/LoginWidgets/confirmregistration.js" section-name="Bottom" assembly-ref="Progress.Sitefinity.AspNetCore.Widgets"></script>
+<div class="card-body @(string.IsNullOrEmpty(Model.CssClass) ? null : Model.CssClass)" @Html.BuildAttributes(Model.Attributes)>
+    @if (response != null)
+    {
+
+        if (response.accountIsActive)
+        {
+            <input type="hidden" id="hdnLandingPage" name="hdnLandingPage" value="@Model.LoginPageUrl" />
+            <input type="hidden" id="hdnEmail" name="hdnEmail" value="@Model.Email" />
+            <input type="hidden" id="hdnVerificationPageUrl" name="hdnVerificationPageUrl" value="@Model.VerificationPageUrl" />
+
+            <p class="h4 fw-bold mb-2 text-center">
+                Account Activated Successfully
+            </p>
+            <p class="mb-2 text-center">Your account has been successfully activated.Please click on the button below to login.</p>
+            <p class="mb-2 text-center">
+                <a class="btn btn-lg vodafone-btn mt-1" href="@Model.LoginPageUrl">@lbls.LoginLink</a>
+            </p>
+        }
+        else
+        {
+            <p class="h4 fw-bold mb-2 text-center">
+                Confirm Email
+            </p>
+            <p>@response.frontendErrorMessage</p>
+            <p>@response.developerErrorMessage</p>
+            <button type="button" id="btnResend" name="btnResend">Resend</button>
+        }
+    }
+    else
+    {
+
+        <p class="h4 fw-bold mb-2 text-center">
+            Account Activation Failed
+        </p>
+       
+        <p class="mb-2 text-center">
+            The account activation has failed. This account may have already been activated or the link is not valid
+        </p>
+        
+    
+    
+    }
+</div>
+
+
+

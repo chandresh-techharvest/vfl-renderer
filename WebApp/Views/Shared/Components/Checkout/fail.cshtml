@@ -1,0 +1,70 @@
+﻿@model VFL.Renderer.ViewModels.Checkout.CheckoutViewModel
+
+@{
+    string customerPageUrl = !String.IsNullOrEmpty(Model.CustomerSuportPageUrl) ? Model.CustomerSuportPageUrl : "/";
+    string homePageUrl = !String.IsNullOrEmpty(Model.HomePageUrl) ? Model.HomePageUrl : "/";
+}
+@{
+    string TermsConditionsUrl = Model.TermsConditionsPage != null ? Model.TermsConditionsPage.ViewUrl : "#";
+}
+
+
+
+<div class="row" id="fail" >
+    <div class="col-xl-12">
+        <div class="card custom-card">
+            <div class="card-body">
+                <div class="container-fluid px-3 px-md-5">
+                    <div class="row g-4">
+                        <div class="container text-center">
+                            <div class="success-content-box p-md-5">
+                                <div class=" d-flex align-items-center justify-content-center">
+                                    <svg fill="#d60000" width="90px" height="auto" viewBox="0 -8 528 528" xmlns="http://www.w3.org/2000/svg" stroke="#d60000" stroke-width="2.112"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"><title>fail</title><path d="M264 456Q210 456 164 429 118 402 91 356 64 310 64 256 64 202 91 156 118 110 164 83 210 56 264 56 318 56 364 83 410 110 437 156 464 202 464 256 464 310 437 356 410 402 364 429 318 456 264 456ZM264 288L328 352 360 320 296 256 360 192 328 160 264 224 200 160 168 192 232 256 168 320 200 352 264 288Z"></path></g></svg>
+                                </div>
+                                <h2 class="text-gray-900 mt-3" id="pageTitle">@Model.PageType Unsuccessful</h2>
+
+                                <div class="table-container">
+                                    <div class="table-responsive mt-1">
+                                        <table class="table table-bordered">
+                                            <tbody>
+                                                <tr>
+                                                    <td>Date</td>
+                                                    <td id="failDate"></td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Order Number</td>
+                                                    <td id="failOrderRef"></td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Email</td>
+                                                    <td id="failEmail"></td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Number</td>
+                                                    <td id="failNumber"></td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Amount</td>
+                                                    <td id="failAmount"></td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                                <p class="mt-3">You will receive an Email and SMS pertaining to your transaction details. <br>Thank you for shopping with us.</p>
+
+                                <div class="mt-4 d-flex justify-content-center flex-wrap" id="ButtonContainer">
+                                    <!-- <a href="" class="btn btn-primary mb-2 mb-md-0 me-2">Chat</a> -->
+                                    <a href="@customerPageUrl" class="btn btn-primary mb-2 mb-md-0 me-2">Customer Support</a>
+                                    <a href="@homePageUrl" class="btn btn-primary">Back</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+<script src="~/scripts/webtopupwidget/fail.js"></script>

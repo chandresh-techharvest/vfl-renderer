@@ -1,0 +1,185 @@
+{
+  "CardsList": [
+    {
+      "fieldTitle": "Image",
+      "fieldType": "RelatedImage"
+    },
+    {
+      "fieldTitle": "Title",
+      "fieldType": "ShortText"
+    },
+    {
+      "fieldTitle": "Text",
+      "fieldType": "Text"
+    }
+  ],
+
+  "ListWithSummary": [
+    {
+      "fieldTitle": "Title",
+      "fieldType": "ShortText"
+    },
+    {
+      "fieldTitle": "Text",
+      "fieldType": "Text"
+    },
+    {
+      "fieldTitle": "Publication date",
+      "fieldType": "DateTime"
+    }
+  ],
+  "ListWithImage": [
+    {
+      "fieldTitle": "Title",
+      "fieldType": "ShortText"
+    },
+    {
+      "fieldTitle": "Image",
+      "fieldType": "RelatedImage"
+    },
+    {
+      "fieldTitle": "Text",
+      "fieldType": "Text"
+    }
+  ],
+  "ListWithLinkImage": [
+    {
+      "fieldTitle": "Title",
+      "fieldType": "ShortText"
+    },
+    {
+      "fieldTitle": "LinkImage",
+      "fieldType": "RelatedImage"
+    },
+    {
+      "fieldTitle": "LinkUrl",
+      "fieldType": "Link"
+    }
+  ],
+  "VFCardsList": [
+    {
+      "fieldTitle": "Image",
+      "fieldType": "RelatedImage"
+    },
+    {
+      "fieldTitle": "Title",
+      "fieldType": "ShortText"
+    },
+    {
+      "fieldTitle": "Text",
+      "fieldType": "Text"
+    }
+  ],
+  "VFStaticCardsList": [
+    {
+      "fieldTitle": "CardImage",
+      "fieldType": "RelatedImage"
+    },
+    {
+      "fieldTitle": "Title",
+      "fieldType": "ShortText"
+    },
+    {
+      "fieldTitle": "Text",
+      "fieldType": "Text"
+    },
+    {
+      "fieldTitle": "LinkUrl",
+      "fieldType": "Link"
+    }
+  ],
+  "ListNews": [
+    {
+      "fieldTitle": "Title",
+      "fieldType": "ShortText"
+    },
+    {
+      "fieldTitle": "Image",
+      "fieldType": "RelatedImage"
+    },
+    {
+      "fieldTitle": "Text",
+      "fieldType": "Text"
+    },
+    {
+      "fieldTitle": "Publication date",
+      "fieldType": "DateTime"
+    }
+  ],
+
+  "VFLCardsList": [
+    {
+      "fieldTitle": "Title",
+      "fieldType": "ShortText"
+    },
+    {
+      "fieldTitle": "Text",
+      "fieldType": "Text"
+    },
+    {
+      "fieldTitle": "Image",
+      "fieldType": "RelatedImage"
+    },
+    {
+      "fieldTitle": "LinkImage",
+      "fieldType": "RelatedImage"
+    },
+    {
+      "fieldTitle": "LinkText",
+      "fieldType": "ShortText"
+    },
+    {
+      "fieldTitle": "LinkUrl",
+      "fieldType": "Link"
+    }
+  ],
+
+  "ExpandableList-1Colum": [
+    {
+      "fieldTitle": "Title",
+      "fieldType": "ShortText"
+    },
+    {
+      "fieldTitle": "Text",
+      "fieldType": "Text"
+    }
+  ],
+
+  "ExpandableList-2Colum": [
+    {
+      "fieldTitle": "Title",
+      "fieldType": "ShortText"
+    },
+    {
+      "fieldTitle": "Text",
+      "fieldType": "Text"
+    }
+  ],
+
+  "ListWithContent": [
+    {
+      "fieldTitle": "Title",
+      "fieldType": "ShortText"
+    },
+    {
+      "fieldTitle": "Text",
+      "fieldType": "Text"
+    }
+  ],
+  "VFBoxCardsList": [
+    {
+      "fieldTitle": "Title",
+      "fieldType": "ShortText"
+    },
+    {
+      "fieldTitle": "Image",
+      "fieldType": "RelatedImage"
+    },
+    {
+      "fieldTitle": "Text",
+      "fieldType": "Text"
+    }
+  ]
+
+
+}

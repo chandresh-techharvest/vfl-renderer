@@ -1,0 +1,30 @@
+﻿@using Progress.Sitefinity.AspNetCore.Mvc.Rendering
+
+@model Progress.Sitefinity.AspNetCore.Widgets.Models.Breadcrumb.BreadcrumbViewModel
+
+<div class="@Model.CssClass" @Html.BuildAttributes(Model.Attributes)>
+    @if (!string.IsNullOrEmpty(Model.PageMissingMessage))
+    {
+        <div class="@Model.CssClass" @Html.BuildAttributes(Model.Attributes)>@Model.PageMissingMessage</div>
+    }
+    else
+    {
+        <nav aria-label="Full path to the current page">
+            <ol class="breadcrumb">
+                @for (int i = 0; i < Model.Pages.Count; i++)
+                {
+                    var node = Model.Pages[i];
+
+                    if (i == Model.Pages.Count - 1)
+                    {
+                        <li class="breadcrumb-item active" aria-current="page">@node.Title</li>
+                    }
+                    else
+                    {
+                        <li class="breadcrumb-item"><a href="@node.ViewUrl">@node.Title</a></li>
+                    }
+                }
+            </ol>
+        </nav>
+    }
+</div>

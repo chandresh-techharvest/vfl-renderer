@@ -1,0 +1,158 @@
+﻿@using Progress.Sitefinity.AspNetCore.Mvc.Rendering
+@using VFL.Renderer.Models.ResetPassword
+
+@model VFL.Renderer.ViewModels.ResetPassword.CustomResetPasswordViewModel
+
+@{
+    var lbls = Model.Labels;
+}
+
+<div data-sf-visibility-hidden="@Model.VisibilityClasses[Progress.Sitefinity.AspNetCore.Configuration.VisibilityStyle.Hidden]" data-sf-invalid="@Model.InvalidClass" class="card-body @(string.IsNullOrEmpty(Model.CssClass) ? null : Model.CssClass)" @Html.BuildAttributes(Model.Attributes)>
+    @if (Model.IsResetPasswordRequest)
+    {
+        <div data-sf-role="sf-reset-password-container" class="authentication-cover">
+            @if (Model.Error || (Model.RequiresQuestionAndAnswer && string.IsNullOrEmpty(Model.SecurityQuestion)))
+            {
+                <h2>@lbls.ResetPasswordHeader</h2>
+                <div data-sf-role="error-message-container" class="alert alert-danger" role="alert" aria-live="assertive">@lbls.ErrorMessage</div>
+            }
+            else
+            {
+                <environment include="Development">
+                    <script src="/scripts/LoginWidgets/reset-password.js" section-name="Bottom" assembly-ref="Progress.Sitefinity.AspNetCore.Widgets"></script>
+                </environment>
+                <environment exclude="Development">
+                    @* <script src="scripts/LoginWidgets/reset-password.min.js" section-name="Bottom" assembly-ref="Progress.Sitefinity.AspNetCore.Widgets"></script> *@
+                    <script src="/scripts/LoginWidgets/reset-password.js" section-name="Bottom" assembly-ref="Progress.Sitefinity.AspNetCore.Widgets"></script>
+                </environment>
+
+                var securityQuestionInputId = Html.GetUniqueId("sf-security-question-");
+                var newPasswordInputId = Html.GetUniqueId("sf-new-password-");
+                var repeatPasswordInputId = Html.GetUniqueId("sf-repeat-password-");
+
+                <div data-sf-role="form-container" class="aunthentication-cover-content">
+                    <h2 class="mb-3">@lbls.ResetPasswordHeader</h2>
+                    <p class="mb-4 fw-normal text-center">Remember your password? <a href="@Model.LoginPageLink" class="text-primary text-decoration-underline fw-semibold">@lbls.BackLinkLabel</a></p>
+                    <div data-sf-role="error-message-container" id="errorMessage" class="alert alert-danger d-none my-3" role="alert" aria-live="assertive"></div>                    
+                    <form method="post" action="@Model.ResetUserPasswordHandlerPath" role="form" class="row gy-3">
+                        @if (Model.RequiresQuestionAndAnswer && !string.IsNullOrEmpty(Model.SecurityQuestion))
+                        {
+                            var securityQuestionLabel = string.IsNullOrEmpty(lbls.SecurityQuestionLabel) ? Model.SecurityQuestion : $"{lbls.SecurityQuestionLabel} {Model.SecurityQuestion}";
+                            <div class="mb-3">
+                                <label for="@securityQuestionInputId" class="form-label">@securityQuestionLabel</label>
+                                <input id="@securityQuestionInputId" type="text" class="form-control" name="Answer" data-sf-role="required">
+                            </div>
+                        }
+                        <div class="col-xl-12">
+                            <label for="@newPasswordInputId" class="form-label text-default op-8">@lbls.NewPasswordLabel</label>
+                            <input id="@newPasswordInputId" type="password" class="form-control form-control-lg" name="NewPassword" data-sf-role="required">
+                        </div>
+                        <div class="col-xl-12 mb-2">
+                            <label for="@repeatPasswordInputId" class="form-label text-default op-8">@lbls.RepeatNewPasswordLabel</label>
+                            <input id="@repeatPasswordInputId" type="password" class="form-control form-control-lg" name="password" data-sf-role="required">
+                            <input type="hidden" name="VerificationPageUrl" class="VerificationPageUrl" asp-for="VerificationPageUrl" value="https://localhost:5001/" />
+                            <input type="hidden" name="user" asp-for="UserName" value="@Model.UserName" />
+                            <input type="hidden" name="token" asp-for="token" value="@Model.token" />
+                        </div>
+                        <div class="col-xl-12 d-grid mt-2">
+                            <input type="hidden" name="SecurityToken" value="@Context.Request.QueryString.Value" />
+                            <input class="btn btn-lg vodafone-btn mt-1" type="submit" value="@lbls.SaveButtonLabel" />
+                            <input type="hidden" name="MembershipProviderName" value="@Model.MembershipProviderName" />
+                        </div>
+                    </form>
+                    <input type="hidden" name="ErrorMessage" value="@lbls.ErrorMessage" />
+                    <input type="hidden" name="AllFieldsAreRequiredErrorMessage" value="@lbls.AllFieldsAreRequiredErrorMessage" />
+                    <input type="hidden" name="PasswordsMismatchErrorMessage" value="@lbls.PasswordsMismatchErrorMessage" />
+                </div>
+                <div data-sf-role="success-message-container" class="d-none">
+                    <h2>@lbls.SuccessMessage</h2>
+                    @if (!string.IsNullOrEmpty(Model.LoginPageLink))
+                    {
+                        <a href="@Model.LoginPageLink" class="text-decoration-none">@lbls.BackLinkLabel</a>
+                    }
+                </div>
+            }
+        </div>
+    }
+    else
+    {
+        <environment include="Development">
+            <script src="scripts/LoginWidgets/forgotten-password.js" section-name="Bottom" assembly-ref="Progress.Sitefinity.AspNetCore.Widgets"></script>
+        </environment>
+        <environment exclude="Development">
+            @* <script src="scripts/LoginWidgets/forgotten-password.min.js" section-name="Bottom" assembly-ref="Progress.Sitefinity.AspNetCore.Widgets"></script> *@
+            <script src="scripts/LoginWidgets/forgotten-password.js" section-name="Bottom" assembly-ref="Progress.Sitefinity.AspNetCore.Widgets"></script>
+        </environment>
+        var emailInputId = Html.GetUniqueId("sf-email-");
+        <div data-sf-role="sf-forgotten-password-container" class="authentication-cover">
+            
+            
+            <div data-sf-role="form-container" class="aunthentication-cover-content">
+                <p class="h4 fw-semibold mb-2 text-center">@lbls.ForgottenPasswordHeader</p>
+                <p class="mb-4 fw-normal text-center">Remember your password? <a href="@Model.LoginPageLink" class="text-primary text-decoration-underline fw-semibold">@lbls.BackLinkLabel</a></p>
+                @* <p>@lbls.ForgottenPasswordLabel</p> *@
+                <div data-sf-role="error-message-container" class="alert alert-danger my-3 d-none" role="alert" aria-live="assertive"></div>
+                <div class="ResendLink d-none pb-3" id="ResendLink">
+                    <input type="hidden" name="ConfirmVerificationUrl" id="ConfirmVerificationUrl" value="@Model.VerificationPageUrl" />
+                    <a href="javascript:void(0);" id="resendConfirmEmail" class="btn btn-primary">Resend Verificaion Email</a>
+                </div>
+                <form action="@Model.SendResetPasswordEmailHandlerPath" role="form" novalidate class="row gy-3">
+                    <div class="col-xl-12">
+                        <label class="form-label text-default op-8" for="@emailInputId">@lbls.EmailLabel</label>
+                        <div class="input-group">
+                            <input id="@emailInputId" type="email" class="form-control form-control-lg" placeholder="Email" name="Email" data-sf-role="required">
+                            <input type="hidden" name="VerificationPageUrl" class="VerificationPageUrl" asp-for="VerificationPageUrl" value="https://localhost:5001/" />
+                        </div>
+                    </div>
+
+                    <div class="col-xl-12 d-grid mt-3">
+                        <input class="btn btn-lg vodafone-btn mt-1" type="submit" />
+                        @* <a class="btn btn-lg vodafone-btn mt-1" data-bs-toggle="modal" data-bs-target="#emailverification">@lbls.SendButtonLabel</a> *@
+                        <div class="modal fade" id="emailverification" tabindex="-1"
+                             aria-labelledby="emailverification" data-bs-keyboard="false"
+                             aria-hidden="true">
+                            <!-- Scrollable modal -->
+                            <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h6 class="modal-title" id="staticBackdropLabel3">
+                                            Email Verification
+                                        </h6>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body" id="modal-body">
+                                        <p>The verification link has been sent to your email address. Please check your inbox and follow the instructions to complete your registration.</p>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                        <a href="reset.html" class="btn btn-primary">Verified</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    @* <input class="btn btn-primary w-100" type="submit" value="@lbls.SendButtonLabel" /> *@
+                    <input type="hidden" name="ResetPasswordUrl" value="@Model.ResetPasswordUrl" />
+                    <input type="hidden" name="MembershipProviderName" value="@Model.MembershipProviderName" />
+                    <input type="hidden" name="RegistrationPageUrl" value="@Model.RegistrationPageUrl" />
+                </form>
+
+                <input type="hidden" name="InvalidEmailFormatMessage" value="@lbls.InvalidEmailFormatMessage" />
+                <input type="hidden" name="FieldIsRequiredMessage" value="@lbls.FieldIsRequiredMessage" />
+            </div>
+            <div data-sf-role="success-message-container" class="d-none mt-3">
+                <p data-sf-role="sent-email-label">@lbls.ForgottenPasswordSubmitMessage</p>
+                <p>@lbls.ForgottenPasswordLinkMessage</p>
+                <a href="/" class="btn btn-lg vodafone-btn mt-1">Home</a>
+            </div>
+          @*   @if (!string.IsNullOrEmpty(Model.LoginPageLink))
+            {
+                <a href="@Model.LoginPageLink" class="text-decoration-none">@lbls.BackLinkLabel</a>
+            } *@
+        </div>
+    }
+</div>
+@* <script type="text/javascript"> *@
+    
+@* </script> *@

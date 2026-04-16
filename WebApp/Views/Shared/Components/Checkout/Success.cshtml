@@ -1,0 +1,70 @@
+﻿@model VFL.Renderer.ViewModels.Checkout.CheckoutViewModel
+
+@{
+    string customerPageUrl = !String.IsNullOrEmpty(Model.CustomerSuportPageUrl) ? Model.CustomerSuportPageUrl : "/";
+    string homePageUrl = !String.IsNullOrEmpty(Model.HomePageUrl) ? Model.HomePageUrl : "/";
+}
+@{
+    string TermsConditionsUrl = Model.TermsConditionsPage != null ? Model.TermsConditionsPage.ViewUrl : "#";
+}
+
+
+<div class="row" id="success" >
+    <div class="col-xl-12">
+        <div class="card custom-card">
+            <div class="card-body">
+                <div class="container-fluid px-3 px-md-5">
+                    <div class="row g-4">
+                        <div class="container text-center">
+                            <div class="success-content-box p-md-5">
+                                <div class=" d-flex align-items-center justify-content-center">
+                                    <svg width="90px" height="auto" viewBox="0 0 1024.00 1024.00" class="icon" xmlns="http://www.w3.org/2000/svg" fill="#000000" stroke="#000000" stroke-width="3.072"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"><path fill="#39a300" d="M512 64a448 448 0 110 896 448 448 0 010-896zm-55.808 536.384l-99.52-99.584a38.4 38.4 0 10-54.336 54.336l126.72 126.72a38.272 38.272 0 0054.336 0l262.4-262.464a38.4 38.4 0 10-54.272-54.336L456.192 600.384z"></path></g></svg>
+                                </div>
+                                <h2 class="text-gray-900 mt-3" id="pageTitle">@Model.PageType Successful</h2>
+                                <p class="mt-1">Dear Customer, thank you for your purchase on Vodafone eStore.</p>
+                                <div class="table-container">
+                                    <div class="table-responsive mt-1">
+                                        <table class="table table-bordered">
+                                            <tbody>
+                                                <tr>
+                                                    <td>Date</td>
+                                                    <td id="successDate"></td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Order Number</td>
+                                                    <td id="successOrderRef"></td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Email</td>
+                                                    <td id="successEmail"></td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Number</td>
+                                                    <td id="successNumber"></td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Amount</td>
+                                                    <td id="successAmount"></td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                                <p class="mt-3">You will receive an Email and SMS pertaining to your transaction details. <br>Thank you for shopping with us.</p>
+
+                                <div class="mt-4 d-flex justify-content-center flex-wrap" id="ButtonContainer">
+                                    <!-- <a href="" class="btn btn-primary mb-2 mb-md-0 me-2">Chat</a> -->
+                                    <a href="@customerPageUrl" class="btn btn-primary mb-2 mb-md-0 me-2">Customer Support</a>
+                                    <a href="@homePageUrl" class="btn btn-primary">Back</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="~/scripts/webtopupwidget/success.js"></script>

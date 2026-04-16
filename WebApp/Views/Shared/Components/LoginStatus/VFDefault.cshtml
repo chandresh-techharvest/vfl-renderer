@@ -1,0 +1,129 @@
+﻿@using Microsoft.AspNetCore.Mvc.Localization;
+
+@model Vfl.Renderer.ViewModels.LoginStatus.LoginStatusViewModel;
+
+@inject IViewLocalizer Localizer
+
+<script src="/vendors/jquery/jquery-3.6.0.min.js"></script>
+<link href="/vendors/dist/sweetalert2.min.css" rel="stylesheet" />
+
+@if (!string.IsNullOrEmpty(Model.Warning))
+{
+    <div class="header-element">
+        <p>@Model.Warning</p>
+        <a href="@Model.LoginPage.ViewUrl" class="header-link layout-setting"><i class="ti ti-login header-link-icon"></i><span style="color: var(--header-prime-color);">@Localizer["Login"]</span></a>
+    </div>
+    return;
+}
+@if (Context.User != null && Context.User.Identity.IsAuthenticated)
+{
+    var path = Context.Request.Scheme + "://" + Context.Request.Host + "/api/LoginForm/Logout";
+
+    @*  <li class="nav-item">
+        <a class="dropdown-item" href="@path" target="_self">@Localizer["Logout"]</a>
+    </li> *@
+
+    <div class="header-element">        
+        <a href="javascript:void(0);" class="header-link dropdown-toggle" id="mainHeaderProfile" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">
+            <div class="d-flex align-items-center">
+                <div>
+                    @if (!string.IsNullOrEmpty(Model.ProfileImageUrl))
+                    {
+                        <img src="@Model.ProfileImageUrl" alt="img" width="30" height="30" class="rounded-circle">
+                    }
+                    else
+                    {
+                        <img src="/images/default-source/assets/img/users/profileimage.png" alt="img" width="30" height="30" class="rounded-circle">
+                    }
+                </div>
+            </div>
+        </a>
+        <div class="main-header-dropdown dropdown-menu pt-0 overflow-hidden header-profile-dropdown dropdown-menu-end" aria-labelledby="mainHeaderProfile">
+            <div class="header-dropdown bg-primary text-fixed-white rounded-top">
+                <div class="d-flex align-items-center">
+                    <div class="me-sm-2 me-0 avatar">
+                        @if (!string.IsNullOrEmpty(Model.ProfileImageUrl))
+                        {
+                            <img src="@Model.ProfileImageUrl" alt="img" width="30" height="30" class="rounded-circle">
+                        }
+                        else
+                        {
+                            <img src="/images/default-source/assets/img/users/profileimage.png" alt="img" class="rounded-circle">
+                        }
+                    </div>
+                    <div class="d-sm-block d-none">
+                        <p class="fw-semibold mb-0 lh-1">@Model.Name</p>
+                        @* <span class="op-7 fw-medium d-block fs-12">Administrator</span> *@
+                    </div>
+                </div>
+            </div>
+            <div class="dropdown-divider mb-0"></div>
+            <ul class="list-unstyled mb-0">
+                @if (Model.ProfilePage != null)
+                {
+                    <li><a class="dropdown-item d-flex" href="@Model.ProfilePage.ViewUrl"><i class="ti ti-user-circle fs-18 me-2"></i>Profile</a></li>
+                }
+                @if (Model.UserDashboard != null)
+                {
+                    <li>
+                        <a class="dropdown-item d-flex" href="@Model.UserDashboard.ViewUrl"><i class="ti ti-dashboard fs-18 me-2"></i> Dashboard</a>
+                    </li>
+                }
+                @if (Model.Support != null)
+                {
+                    <li>
+                        <a class="dropdown-item d-flex" href="@Model.Support.ViewUrl
+                                "><i class="ti ti-headset fs-18 me-2"></i>Support</a>
+                    </li>
+                }
+                <li>
+                    <a class="dropdown-item d-flex js-logout" href="#"><i class="ti ti-logout fs-18 me-2"></i>@Localizer["Logout"]</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+}
+else
+{
+
+    //new design for public content
+    <div class="header-content-right">
+        <div class="header-element">
+            @if (Model.LoginPage != null)
+            {
+                <a href="@Model.LoginPage.ViewUrl" target="_self" class="header-link layout-setting"><i class="ti ti-login header-link-icon"></i><span style="color: var(--header-prime-color);">@Localizer["Login"]</span></a>
+            }
+            @if (Model.RegistrationPage != null)
+            {
+                <a href="@Model.RegistrationPage.ViewUrl" target="_self" class="header-link layout-setting"><i class="ti ti-user-circle header-link-icon"></i> <span style="color: var(--header-prime-color);">@Localizer["RegisterNow"]</span></a>
+            }
+
+        </div>
+
+    </div>
+
+
+    //old design for public content
+
+    @* <div class="header-four-top-social-box">
+        <ul>
+            <div class="header-four-top-location-box">
+                @if (Model.LoginPage != null)
+                {
+                    <a href="@Model.LoginPage.ViewUrl" target="_self"><i class="icon-map"></i>@Localizer["Login"]</a>
+                }
+                @* <a href="#"><i class="icon-map"></i>Sign In</a> *@
+            @* </div>
+            <div class="header-four-top-location-box header-menu">
+                @if (Model.RegistrationPage != null)
+                {
+                    <a href="@Model.RegistrationPage.ViewUrl" target="_self"><i class="icon-map"></i>@Localizer["RegisterNow"]</a>
+                } *@
+                @* <a href="#"><i class="icon-map"></i>My Vodafone</a> *@
+        @*     </div>
+        </ul> 
+    </div> *@
+}
+
+<script src="~/scripts/LoginWidgets/logout.js"></script>
+<script src="~/vendors/dist/sweetalert2.min.js"></script>

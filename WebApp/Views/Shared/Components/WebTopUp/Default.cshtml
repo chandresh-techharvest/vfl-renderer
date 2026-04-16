@@ -1,0 +1,163 @@
+﻿@model VFL.Renderer.Models.WebTopUp.WebTopUpViewModel
+<link href="~/vendors/dist/sweetalert2.min.css" rel="stylesheet" />
+@if (!string.IsNullOrEmpty(Model.CheckoutPage?.UrlName))
+{
+    <input type="hidden"
+           id="hdnCheckoutPage"
+           value="@Model.CheckoutPage.UrlName" />
+}
+
+<div class="row" id="webtopup-default-view">
+    <div class="col-xl-12">
+        <div class="card custom-card">
+            <div class="card-header">
+                <div class="card-title">Vodafone WebTopUp</div>
+            </div>
+
+            <div class="card-body">
+                <h6 class="mb-3">Now you can top up any Vodafone number 24/7 from anywhere in the world.</h6>
+                <div class="mb-3">
+                    <label for="form-text" class="form-label">Select your Plan</label>
+                    <div class="d-flex flex-wrap justify-content-start gap-3 py-3">
+
+                      
+
+
+                        @if (Model?.TopUpAmounts?.Any() == true)
+                        {
+                            foreach (var item in Model.TopUpAmounts)
+                            {
+                                var id = $"value_{item.Value}";
+                                var isChecked = item.IsDefault ? "checked" : "";
+
+                                <div class="text-center">
+
+                                    <input type="radio"
+                                           class="btn-check"
+                                           id="@id"
+                                           name="WebTopUp_value"
+                                           value="@item.Value"
+                                           autocomplete="off"
+                                           @isChecked />
+
+                                    <label class="btn btn-circle" for="@id">
+                                        $@item.Value
+                                    </label>
+
+                                </div>
+                            }
+                        }
+                        else
+                        {
+                            <p class="text-danger">Plans not available</p>
+                        }
+
+
+
+
+                    </div>
+
+                </div>
+                <div id="error-message" class="alert alert-danger" style="display:none;"></div>
+                <form class="row g-3 needs-validation" novalidate>
+                    @* <div class="col-md-12">
+                        <label for="email_address" class="form-label">Email address</label>
+                        <div class="input-group">
+                            <span class="input-group-text" id="basic-addon11">
+                                <svg class="text-muted" xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" viewBox="0 0 16 16">
+                                    <path d="M.05 3.555A2 2 0 0 1 2 2h12a2 2 0 0 1 1.95 1.555L8 8.414.05 3.555ZM0 4.697v7.104l5.803-3.558L0 4.697ZM6.761 8.83l-6.57 4.027A2 2 0 0 0 2 14h12a2 2 0 0 0 1.808-1.144l-6.57-4.027L8 9.586l-1.239-.757Zm3.436-.586L16 11.801V4.697l-5.803 3.546Z"></path>
+                                </svg>
+                            </span>
+                            <input type="text" class="form-control" placeholder="Email Address" aria-label="Username" aria-describedby="basic-addon11" id="email_address" name="email_address">
+                        </div>
+                    </div> *@
+                    <div class="col-md-12">
+                        <label for="mobile_number" class="form-label">Mobile Number</label>
+                        <div class="input-group mb-3">
+                            <span class="input-group-text" id="basic-addon12">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor"
+                                     class="text-muted" viewBox="0 0 16 16">
+                                    <path d="M3.654 1.328a.678.678 0 0 1 1.015-.063L6.29 2.911c.328.329.445.81.293 1.243l-.547 1.548a.678.678 0 0 1-.588.439c-.295.03-.637.064-1.012.102a11.65 11.65 0 0 0 5.516 5.516c.038-.375.072-.717.102-1.012a.678.678 0 0 1 .439-.588l1.548-.547a1.02 1.02 0 0 1 1.243.293l1.646 1.621a.678.678 0 0 1-.063 1.015l-2.29 2.29c-.345.345-.82.515-1.29.45C5.885 13.86 2.14 10.115 1.095 5.572c-.065-.47.105-.945.45-1.29l2.29-2.29Z" />
+                                </svg>
+                            </span>
+                            <input type="number" class="form-control" placeholder="Mobile Number" aria-label="Email Address" aria-describedby="basic-addon12" id="mobile_number"
+                                   name="mobile_number">
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <button type="button"
+                                id="btnContinue"
+                             
+                           
+                                class="btn btn-primary">
+                            Continue
+                        </button>
+                    </div>
+
+
+
+                </form>
+            </div>
+        </div>
+    </div>
+    @* <div class="col-xl-4">
+        <div class="card custom-card">
+            <div class="card-header">
+                <div class="card-title">TopUp Summary</div>
+            </div>
+            <div class="card-body">
+                <p class="fs-14">
+                    <span class="fw-semibold"> Name :</span>
+                    <span class="text-muted" id="luName"></span>
+                </p>
+                <p class="fs-14">
+                    <span class="fw-semibold"> Email  :</span>
+                    <span class="text-muted" id="luEmail"></span>
+                </p>
+                <p class="fs-14">
+                    <span class="fw-semibold"> Phone No  :</span>
+                    <span class="text-muted" id="luPhone"></span>
+                </p>
+
+                <div class="table-responsive">
+                    <table class="table table-bordered text-nowrap">
+                        <tbody>
+                            <tr>
+                                <td>
+                                    <span>Total Items</span>
+                                </td>
+                                <td class="text-end">
+                                    <span>1</span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <span>WebTopUp</span>
+                                </td>
+                                <td class="text-end">
+                                    <span id="selection_display">$40</span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <span class="fw-semibold fs-20">Total </span>
+                                </td>
+                                <td class="text-end">
+                                    <span class="fw-semibold fs-20" id="total_display">$40</span>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+
+        </div>
+    </div> *@
+</div>
+
+
+
+<!-- End::row-1 -->
+<script src="~/scripts/WebTopUpWidget/WebTopUp.js" asp-append-version="true" section-name="Scripts"></script>
+<script src="~/vendors/dist/sweetalert2.min.js"></script>

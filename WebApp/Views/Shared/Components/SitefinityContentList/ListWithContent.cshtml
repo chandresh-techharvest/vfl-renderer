@@ -1,0 +1,30 @@
+﻿@using Progress.Sitefinity.AspNetCore.Mvc.Rendering;
+
+@model Progress.Sitefinity.AspNetCore.Widgets.Models.ContentList.ContentListViewModel
+@{    
+    var titleCss = Model.GetFieldCss("Title");
+    var textCss = Model.GetFieldCss("Text");
+    var wrapperCss = Model.GetFieldCss("Content list");
+    var classAttr = string.IsNullOrEmpty(wrapperCss) ? null : wrapperCss;
+}
+
+<div class="">
+    <section style="max-width: 1000px; margin: 30px auto; padding: 30px; background-color: rgba(249, 249, 249, 1); border-radius: 8px; border-left: 5px solid rgba(230, 0, 0, 1); font-family: &quot;Helvetica Neue&quot;, Helvetica, Arial, sans-serif">
+        @foreach (var item in Model.Items)
+        {            
+            var title = Model.GetFieldValue<string>(item, "Title");
+            var text = Model.GetFieldValue<string>(item, "Text");
+            <h3 style="color: rgba(51, 51, 51, 1); font-size: 20px; margin-top: 0; margin-bottom: 20px; border-bottom: 1px solid rgba(221, 221, 221, 1); padding-bottom: 10px; text-transform: uppercase; letter-spacing: 0.5px">
+                @title
+            </h3>
+            @Html.HtmlSanitize(text)
+        }
+        @if (Model.Pager != null)
+        {
+            <div>
+                @await Html.PartialAsync("ContentPager", Model.Pager)
+            </div>
+        }
+    </section>
+
+</div>

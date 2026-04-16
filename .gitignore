@@ -1,0 +1,14 @@
+﻿################################################################################
+# This .gitignore file was automatically created by Microsoft(R) Visual Studio.
+################################################################################
+
+/.vscode
+/WebApp/.vs
+/WebApp/bin/Debug/net9.0
+/WebApp/obj
+/WebApp/localhost.pfx
+/.vs/VFRenderer/v17
+/.vs
+/VFL.Renderer.OSApi/obj
+/WebApp/keys
+/WebApp/keys/key-62f92747-0252-431c-89fa-43d0eddd01ee.xml

@@ -1,0 +1,105 @@
+﻿@model Progress.Sitefinity.AspNetCore.Models.PageModel
+@using Progress.Sitefinity.AspNetCore.Mvc.Rendering
+
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@addTagHelper *, Progress.Sitefinity.AspNetCore
+
+@inject Progress.Sitefinity.AspNetCore.Web.IRequestContext requestContext;
+
+<!DOCTYPE html>
+
+<html id="html" lang="@requestContext.Culture" dir="ltr" data-nav-layout="vertical" data-theme-mode="light" data-header-styles="light" data-menu-styles="dark" data-toggled="close">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
+
+    @Html.RenderSeoMeta(this.Model)
+
+    <environment include="Development">
+        <link rel="stylesheet" href="@Progress.Sitefinity.AspNetCore.Constants.PrefixRendererUrl("Styles/bootstrap.css")" />
+    </environment>
+    <environment exclude="Development">
+        <link rel="stylesheet" href="@Progress.Sitefinity.AspNetCore.Constants.PrefixRendererUrl("Styles/bootstrap.min.css")" />
+    </environment>
+
+    @* Scripts for the OOB Sitefinity widgets *@
+    <link rel="stylesheet" href="@Progress.Sitefinity.AspNetCore.Constants.PrefixRendererUrl("styles/main.css")" type="text/css" />
+
+    @* Custom styles *@
+    <!-- fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@200;300;400;500;600;700;800&display=swap"
+          rel="stylesheet">
+
+    <!-- stylesheet -->
+    <link rel="stylesheet" href="~/styles/styles.css" />
+    <!-- ---------------------------------------------------------------------------- -->
+    <link href="~/styles/icons.css" rel="stylesheet">
+    <link href="~/libs/simplebar/simplebar.min.css" rel="stylesheet">
+    <link href="~/vendors/dist/sweetalert2.min.css" rel="stylesheet" />
+    <link href="~/libs/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="~/styles/styles.css" rel="stylesheet" />
+
+</head>
+<!-- custom-cursor -->
+<body>
+    
+    <!-- page-wrapper -->
+    <div class="page">
+        <!-- main-header -->
+        <header class="app-header">
+            <!-- header-top -->
+            <div class="main-header-container container-fluid">
+                <div class="header-content-left" data-sfcontainer="TopHeaderLeft">
+                </div>
+                <div class="header-content-right" data-sfcontainer="TopHeaderRight">
+                </div>
+            </div>
+        </header>
+        <!-- Sidebar -->
+        <aside class="app-sidebar" id="sidebar" data-sfcontainer="SideMenu">
+        </aside>
+        <!-- Sidebar End -->
+        <!-- site-main -->
+        <div class="main-content app-content">
+            <!-- Loader -->
+            <div id="loader">
+                <img src="~/images/media/loader.svg" alt="">
+            </div>
+            <!-- Loader -->
+            <div class="container-fluid" data-sfcontainer="mainContent">
+            </div>
+        </div>
+        <footer class="footer mt-auto py-3 bg-white text-center" data-sfcontainer="footermain">
+        </footer>
+    </div>
+    <!-- Scroll To Top -->
+    <div class="scrollToTop">
+        <span class="arrow"><i class="ri-arrow-up-s-fill fs-20"></i></span>
+    </div>
+    <div id="responsive-overlay"></div>
+    <!-- Scroll To Top -->
+    @RenderSection("Scripts")
+   
+    <!--script-->
+    <script src="~/vendors/dist/sweetalert2.min.js"></script>
+    <script src="/libs/popperjs/core/umd/popper.min.js"></script>
+    <script src="/libs/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="/scripts/defaultmenu.min.js"></script>
+    @* <script src="/libs/node-waves/waves.min.js"></script> *@
+    <script src="/scripts/sticky.js"></script>
+    <script src="/libs/simplebar/simplebar.min.js"></script>
+    @* <script src="/scripts/simplebar.js"></script> *@
+    <script src="/scripts/profile-settings.js"></script>
+    <script src="/scripts/custom.js"></script>
+    <script src="/scripts/main.js"></script>
+    @* Custom scripts *@
+    <script src="/scripts/scripts.js"></script>
+
+     @section Bottom {
+    
+    }
+</body>
+</html>

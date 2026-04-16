@@ -1,0 +1,56 @@
+﻿@using Newtonsoft.Json
+@using Progress.Sitefinity.AspNetCore.Mvc.Rendering
+@using Progress.Sitefinity.RestSdk.Dto;
+@using VFL.Renderer.Dto
+
+@model Progress.Sitefinity.AspNetCore.Widgets.Models.ContentList.ContentListViewModel
+@{
+    var imageCss = Model.GetFieldCss("Image");
+    var titleCss = Model.GetFieldCss("Title");
+    var textCss = Model.GetFieldCss("Text");
+    var wrapperCss = Model.GetFieldCss("Content list");
+}
+
+<div class="row row-cols-1 row-cols-md-3 @(wrapperCss)" @Html.BuildAttributes(Model.Attributes)>
+    
+
+    @foreach (var item in Model.Items)
+    {
+        var image = Model.GetFirstRelatedMedia(item, "Image");
+        var thumbnail = image != null ? image.GetThumbnail() : null;
+        var title = Model.GetFieldValue<string>(item, "Title");
+        var text = Model.GetFieldValue<string>(item, "Text");
+        var Link = Model.GetFieldValue<string>(item, "LinkUrl");
+            var LinkText = Model.GetFieldValue<string>(item, "LinkText");
+        LinkItemModel[] links = JsonConvert.DeserializeObject<LinkItemModel[]>(Link);
+
+        <div class="col-lg-4 col-lg-4 col-md-6 col-sm-12 text-center wow fadeInLeft animated"
+             data-wow-duration="1500ms" data-wow-delay="400ms">
+            <!-- services-four-box -->
+            <div class="services-four-box">
+                <h3>@title</h3>
+                @if (thumbnail != null)
+                {
+                    <img src='@(thumbnail.Url)' title='@(image.Title)' />
+                }
+                else if (image != null)
+                {
+                    <img width="80px" src='@(image.Url)' alt='@(image.AlternativeText)' title='@(image.Title)' />
+                }
+                
+                <!--<i class="flaticon-cell_tower"></i>-->
+                <p>@Html.HtmlSanitize(text)</p>
+                <div class="services-four-btn">
+                    <a href="@links[0].href" class="btn-read-more">@LinkText</a>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+@if (Model.Pager != null)
+{
+    <div class="mt-2">
+        @await Html.PartialAsync("ContentPager", Model.Pager)
+    </div>
+}
